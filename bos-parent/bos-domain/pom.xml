@@ -20,10 +20,6 @@
   		<groupId>org.springframework</groupId>
   		<artifactId>spring-orm</artifactId>
   	</dependency>
-  	<dependency>
-  		<groupId>org.springframework</groupId>
-  		<artifactId>spring-test</artifactId>
-  	</dependency>
   	<!-- spring data jpa -->
   	<dependency>
 		<groupId>org.springframework.data</groupId>
@@ -87,7 +83,7 @@
 						<!--  hibernate.properties 文件 插件需要连接数据库 配置信息 -->
 						<propertyfile>src/main/resources/hibernate.properties</propertyfile>
 						<!-- 生成实体类默认生成包名 -->
-						<packagename>cn.itcast.mavenbos.domain</packagename>
+						<packagename>com.airyisea.bos.domain</packagename>
 						<jdk5>true</jdk5>
 						<!-- true  生成注解  /false  没有注解   -->
 						<ejb3>true</ejb3>

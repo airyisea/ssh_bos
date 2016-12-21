@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -43,6 +44,30 @@ input[type=password] {
 	if(window.self != window.top){
 		window.top.location = window.location;
 	}
+	
+	var checkcode_flag = false;
+	
+	$(function(){
+		$("input[name='checkcode']").blur(function(){
+			$.post("${pageContext.request.contextPath}/user/user_checkcode",{"checkcode" : this.value},function(data){
+				if(data) {
+					checkcode_flag = true;
+					$("#checkcode_msg").html("<font color='green'>√</font>");
+				}else {
+					checkcode_flag = false
+					$("#checkcode_msg").html("<font color='red'>×</font>");
+				}
+			});
+		});
+	});
+	
+	go = function() {
+		if(checkcode_flag) {
+			$("#loginform").submit();
+		}
+	}
+	
+	
 </script>
 </head>
 <body>
@@ -60,7 +85,7 @@ input[type=password] {
 			</div>
 			<div class="loginForm">
 				<form id="loginform" name="loginform" method="post" class="niceform"
-					action="">
+					action="${pageContext.request.contextPath}/user/user_login">
 					<div id="idInputLine" class="loginFormIpt showPlaceholder"
 						style="margin-top: 5px;">
 						<input id="loginform:idInput" type="text" name="username"
@@ -82,11 +107,12 @@ input[type=password] {
 							<img id="loginform:vCode" src="${pageContext.request.contextPath }/validatecode.jsp"
 								onclick="javascript:document.getElementById('loginform:vCode').src='${pageContext.request.contextPath }/validatecode.jsp?'+Math.random();" />
 						</div>
-						<a href="${pageContext.request.contextPath}/page_common_index.action" id="loginform:j_id19" name="loginform:j_id19">
+						<a href="javascript:void(0)" id="loginform:j_id19" name="loginform:j_id19" onclick="go();">
 						<span
 							id="loginform:loginBtn" class="btn btn-login"
 							style="margin-top:-36px;">登录</span>
 						</a>
+						<span id="checkcode_msg"><s:actionerror/><s:fielderror/></span>
 					</div>
 				</form>
 			</div>
@@ -94,7 +120,7 @@ input[type=password] {
 	</div>
 	<div
 		style="width: 900px; height: 50px; position: absolute; text-align: left; left: 50%; top: 50%; margin-left: -450px;; margin-top: 220px;">
-		<span style="color: #488ED5;">Powered By www.itcast.cn</span><span
+		<span style="color: #488ED5;">Powered By www.airyisea.con</span><span
 			style="color: #488ED5;margin-left:10px;">推荐浏览器（右键链接-目标另存为）：<a
 			href="http://download.firefox.com.cn/releases/full/23.0/zh-CN/Firefox-full-latest.exe">Firefox</a>
 		</span><span style="float: right; color: #488ED5;">宅急送BOS系统</span>
