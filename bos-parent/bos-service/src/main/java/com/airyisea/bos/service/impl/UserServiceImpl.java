@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.airyisea.bos.dao.user.UserDao;
 import com.airyisea.bos.domain.user.User;
 import com.airyisea.bos.service.UserService;
+import com.airyisea.bos.utils.MD5Utils;
 @Service("userService")
 @Transactional
 public class UserServiceImpl implements UserService{
@@ -17,6 +18,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public void save(User user) {
+		user.setPassword(MD5Utils.getPwd(user.getPassword()));
 		userDao.save(user);
 		
 	}
@@ -39,11 +41,12 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void updateUser(User user) {
+		user.setPassword(MD5Utils.getPwd(user.getPassword()));
 		userDao.save(user);
 	}
-	
+	@Override
 	public User login(String name,String password){
-		return userDao.findByUsernameAndPassword(name, password);
+		return userDao.findByUsernameAndPassword(name, MD5Utils.getPwd(password));
 	}
 	
 

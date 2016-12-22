@@ -67,8 +67,7 @@
 		$.messager.confirm("系统提示","你确定要退出本系统吗？",
 				function(isConfirm){
 					if(isConfirm) {
-						location.href = '${pageContext.request.contextPath }/login.jsp';
-						<%request.getSession().invalidate();%>
+						location.href = '${pageContext.request.contextPath }/logout.jsp';
 					}
 		});
 	}
@@ -98,7 +97,7 @@
 		window.setTimeout(function(){
 			$.messager.show({  	
 			  title:'消息提示',  	
-			  msg:'欢迎登录，超级管理员！<a href="javascript:void" onclick="showAbout();">联系管理员</a>',  	
+			  msg:'欢迎登录，${loginUser.username}！<a href="javascript:void" onclick="showAbout();">联系管理员</a>',  	
 			  timeout:5000,  	
 			  showType:'slide'
 			});
@@ -107,9 +106,34 @@
 		$("#btnCancel").click(function(){
 			$('#editPwdWindow').window('close');
 		});
-		
+		//修改密码
 		$("#btnEp").click(function(){
-			alert("修改密码");
+			$.post("${pageContext.request.contextPath}/user/user_changePassword",{"newPwd":$("#txtNewPass").val(),"rePwd":$("#txtRePass").val()},function(data){
+				//1:修改成功,0:服务器异常,-1:密码为必须为3-16位,-2:两次密码不一致,-3:与原密码一致
+				switch(data) 
+				{
+					case -1:{
+						$.messager.alert("失败","密码必须为3-16位","error");
+						break;
+					}
+					case -2:{
+						$.messager.alert("失败","两次密码不一致","error");
+						break;
+					}
+					case -3:{
+						$.messager.alert("失败","新密码与原密码相同","error");
+						break;
+					}
+					case 1:{
+						$('#editPwdWindow').window('close');
+						$.messager.alert("成功","修改成功","info");
+						break;
+					}
+					default:{
+						$.messager.alert("服务器异常,联系管理员","error");
+					}
+				}
+			});
 		});
 
 	});
@@ -123,7 +147,7 @@
 			src="${pageContext.request.contextPath}/images/logo.png"/>
 		<!-- 当前用户信息 -->
 		<div style="position:absolute;right: 20px;top:10px;">
-			[<strong>超级管理员</strong>]，欢迎你！您使用[<strong>${pageContext.request.remoteAddr}</strong>]IP登录!
+			[<strong>${loginUser.username}</strong>]，欢迎你！您使用[<strong>${pageContext.request.remoteAddr}</strong>]IP登录!
 		</div>
 		<!-- 更换皮肤和控制面板 -->
 		<div style="position: absolute; right: 5px; bottom: 10px; ">

@@ -10,12 +10,16 @@ import org.springframework.stereotype.Controller;
 
 import com.airyisea.bos.action.base.BaseAction;
 import com.airyisea.bos.domain.user.User;
+import com.airyisea.bos.utils.MD5Utils;
+@SuppressWarnings("serial")
 @Controller
 @Scope("prototype")
 @ParentPackage("bos")
 @Namespace("/user")
 public class UserAction extends BaseAction<User> {
 	
+	//=============================ajax================================================
+	//校验验证码
 	@Action(value="user_checkcode",results={@Result(name="checkcode",type="json")})
 	public String checkcode() throws Exception {
 		String ajax_code = getParameter("checkcode");
@@ -30,8 +34,45 @@ public class UserAction extends BaseAction<User> {
 		return "checkcode";
 	}
 	
+	//修改密码
+	@Action(value="user_changePassword",results={@Result(name="changePassword",type="json")})
+	public String changePassword() throws Exception {
+		try {
+			//1:修改成功,0:服务器异常,-1:密码必须为3-16位,-2:两次密码不一致,-3:与原密码一致
+			String newPwd = getParameter("newPwd");
+			//密码密码必须为3-16位
+			if(StringUtils.isBlank(newPwd) || newPwd.length() < 3 || newPwd.length() > 16) {
+				push(-1);
+				return "changePassword";
+			}
+			//两次密码不一致
+			String rePwd = getParameter("rePwd");
+			if(StringUtils.isBlank(rePwd) || !newPwd.equals(rePwd)) {
+				push(-2);
+				return "changePassword";
+			}
+			User user = (User) getSessionAttribute("loginUser");
+			//与原密码一致
+			if(user.getPassword().equals(MD5Utils.getPwd(newPwd))) {
+				push(-3);
+				return "changePassword";
+			}
+			user.setPassword(newPwd);
+			facadeService.getUserService().updateUser(user);
+			push(1);
+			return "changePassword";
+		} catch (Exception e) {
+			e.printStackTrace();
+			push(0);
+			return "changePassword";
+		}
+	}
+	
+	//=============================ajax================================================
+	
 	@Action(value="user_login",results={@Result(name="login_success",location="/index.jsp",type="redirect"),
-										@Result(name="login_fail",location="/login.jsp")})
+										@Result(name="login_fail",location="/login.jsp"),
+										@Result(name="input",location="/login.jsp")})
 	public String login() throws Exception {
 		String ajax_code = getParameter("checkcode");
 		removeSessionAttribute("checkcode");

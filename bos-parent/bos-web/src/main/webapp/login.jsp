@@ -112,7 +112,7 @@ input[type=password] {
 							id="loginform:loginBtn" class="btn btn-login"
 							style="margin-top:-36px;">登录</span>
 						</a>
-						<span id="checkcode_msg"><s:actionerror/><s:fielderror/></span>
+						<span id="checkcode_msg"><font color="resd"><s:actionerror/></font></span>
 					</div>
 				</form>
 			</div>
@@ -124,6 +124,9 @@ input[type=password] {
 			style="color: #488ED5;margin-left:10px;">推荐浏览器（右键链接-目标另存为）：<a
 			href="http://download.firefox.com.cn/releases/full/23.0/zh-CN/Firefox-full-latest.exe">Firefox</a>
 		</span><span style="float: right; color: #488ED5;">宅急送BOS系统</span>
+		<center><div>
+			<font color="red"><s:fielderror/></font>
+		</div></center>
 	</div>
 </body>
 </html>
