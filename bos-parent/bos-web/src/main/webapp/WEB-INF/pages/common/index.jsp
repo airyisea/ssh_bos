@@ -108,6 +108,28 @@
 		});
 		//修改密码
 		$("#btnEp").click(function(){
+			
+			var newPwd = $("#txtNewPass").val();
+			if(newPwd == null || newPwd == "") {
+				$.messager.alert("错误","密码不能为空","warring");
+				return;
+			}
+			var reg = /\s+/;
+			if(reg.test(newPwd)){
+				$.messager.alert("错误","密码不能包含空格","warring");
+				return;
+			}
+			
+			if(newPwd.length <3 || newPwd.length > 16) {
+				$.messager.alert("错误","密码必须为3-16位","warring");
+				return;
+			}
+			
+			if(newPwd != $("#txtRePass").val()){
+				$.messager.alert("错误","两次密码不一致","warring");
+				return;
+			}
+			
 			$.post("${pageContext.request.contextPath}/user/user_changePassword",{"newPwd":$("#txtNewPass").val(),"rePwd":$("#txtRePass").val()},function(data){
 				//1:修改成功,0:服务器异常,-1:密码为必须为3-16位,-2:两次密码不一致,-3:与原密码一致
 				switch(data) 

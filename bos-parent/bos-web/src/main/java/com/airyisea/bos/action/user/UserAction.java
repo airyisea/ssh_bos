@@ -57,8 +57,7 @@ public class UserAction extends BaseAction<User> {
 				push(-3);
 				return "changePassword";
 			}
-			user.setPassword(newPwd);
-			facadeService.getUserService().updateUser(user);
+			facadeService.getUserService().changePassword(newPwd,user.getId());
 			push(1);
 			return "changePassword";
 		} catch (Exception e) {

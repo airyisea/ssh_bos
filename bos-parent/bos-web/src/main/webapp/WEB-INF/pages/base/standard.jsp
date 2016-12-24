@@ -40,30 +40,77 @@
 					border : false,
 					rownumbers : true,
 					striped : true,
-					pageList: [30,50,100],
+					pageSize:5,
+					pageList: [1,5,10],
 					pagination : true,
 					toolbar : toolbar,
-					url : "../../data/standard.json",
+					url : "${pageContext.request.contextPath}/basic/standard_queryPage",
 					idField : 'id',
 					columns : columns
 				});
-				// 添加取派员窗口
-				$('#addStaffWindow').window({
-			        title: '取派员操作',
+				// 添加取派标准窗口
+				$('#addStandardWindow').window({
+			        title: '取派标准操作',
 			        width: 600,
 			        modal: true,
-			        shadow: true,
+			        shadow: false,
 			        closed: true,
 			        height: 400,
 			        resizable:false,
+			        collapsible:false,
+			    	minimizable:false,
+			    	maximizable:false,
 			        onBeforeClose:function(){
-			        	//   清除form 表单数据 尤其  隐藏id 一定要清除  reset   jquery --->Dom
-			        	  $("#addStaffForm")[0].reset();//  text  
-			        	 $("#tel").removeClass('validatebox-invalid');  
-			             $("#id").val("");  //  一定将隐藏id 值清除 // hidden
+			        	  $("#standardForm")[0].reset();
+			        	  $("#id").val("");
 			        }
 			    });
+				
+				$("#save").click(function(){ 
+					var flag = $("#standardForm").form("validate");
+					if(flag) {
+						$("#standardForm").submit();
+					}
+					
+				});
 			});	
+			//生成取派标准名称
+			getName = function(){
+				var minWeight = $("#minWeight").val();
+				var maxWeight = $("#maxWeight").val();
+				var minLength = $("#minLength").val();
+				var maxLength = $("#maxLength").val();
+				if(maxWeight && minWeight) {
+					if((maxWeight - minWeight) <= 0) {
+						$("#msg").html("<font color='red'>最大重量不能小于最小重量</font>");
+						$("#name").val("");
+						return;
+					}
+				}
+				
+				if(minLength && maxLength) {
+					if((maxLength - minLength) <= 0) {
+						$("#msg").html("<font color='red'>最大长度不能小于最小长度</font>");
+						$("#name").val("");
+						return;
+					}
+				}
+				if(minWeight && maxWeight && minLength && maxLength) {
+					var name = minWeight + "kg-" + maxWeight + "kg;" + minLength + "cm-" + maxLength + "cm";
+					$.post("${pageContext.request.contextPath}/basic/standard_checkName",{name:name},function(data){
+						if(data){
+							$("#name").val(name);
+							$("#msg").html("");
+							
+						}else{
+							$("#name").val("");
+							$("#msg").html("<font color='red'>已存在相同标准</font>");
+						}
+					})
+				}
+				
+			}
+			
 			
 			//工具栏
 			var toolbar = [ {
@@ -71,21 +118,54 @@
 				text : '增加',
 				iconCls : 'icon-add',
 				handler : function(){
-					$('#addStaffWindow').window("open");
+					$('#addStandardWindow').window("open");
 				}
 			}, {
 				id : 'button-edit',
 				text : '修改',
 				iconCls : 'icon-edit',
 				handler : function(){
-					alert('修改');
+					//获取选择的第一条数据
+					var data = $("#grid").datagrid("getSelections");
+					if(data.length == 1) {
+						$('#addStandardWindow').window("open");
+						//将数据封装入表单
+						$("#id").val(data[0].id);
+						$("#name").val(data[0].name);
+						$("#minWeight").val(data[0].minWeight);
+						$("#maxWeight").val(data[0].maxWeight);
+						$("#minLength").val(data[0].minLength);
+						$("#maxLength").val(data[0].maxLength);
+					}else {
+						$.messager.alert("错误","请选择一条数据","warring");
+					}
 				}
 			},{
 				id : 'button-delete',
-				text : '作废',
+				text : '删除',
 				iconCls : 'icon-cancel',
 				handler : function(){
-					alert('作废');
+					var select = $("#grid").datagrid("getSelections");
+					if(select != "" && select != null) {
+						$.messager.confirm("删除记录","确定要删除这些记录？",function(flag){
+							if(flag){
+								var idsArr = new Array(); 
+								for(var i = 0; i < select.length; i++) {
+									idsArr.push(select[i].id);
+								}
+								$.post("${pageContext.request.contextPath}/basic/standard_deleteBatch",{ids:idsArr.join(",")},function(data){
+									if(data){
+										$.messager.alert("成功","删除成功！","info");
+										$("#grid").datagrid("uncheckAll");
+										$("#grid").datagrid("reload");
+									}else{
+										$.messager.alert("失败","删除失败","error");
+									}
+								});
+							}
+						})
+					}
+
 				}
 			},{
 				id : 'button-restore',
@@ -136,7 +216,7 @@
 				width : 120,
 				align : 'center'
 			}, {
-				field : 'company',
+				field : 'operatorStation',
 				title : '操作单位',
 				width : 120,
 				align : 'center'
@@ -148,8 +228,56 @@
 		<div region="center" border="false">
 			<table id="grid"></table>
 		</div>
+		<div id="addStandardWindow" title="" class="easyui-window,easyui-layout"  style="top:20px;left:200px">
+			<div data-options="region:'north'" style="height:31px;overflow:hidden;" split="false" border="false" class="datagrid-toolbar">
+				<a id="save" icon="icon-save" href="javascript:void(0);" class="easyui-linkbutton" plain="true">保存</a>
+			</div>
+			<div data-options="region:'center'" style="overflow:auto;padding:5px;" border="false">
+				<form id="standardForm" action="${pageContext.request.contextPath}/basic/standard_add">
+				<table class="table-edit" width="80%" align="center">
+					<tr class="title">
+						<td colspan="2">取派标准信息</td>
+					</tr>
+					<tr>
+						<td>取派标准名称</td>
+						<td>
+						<input type="hidden" name="id" id="id"/>
+						<input type="text" name="name" class="easyui-validatebox" data-options="required:true" readonly="readonly" id = "name"/>
+						</td>
+					</tr>
+					<tr>
+						<td>最小重量</td>
+						<td>
+						<input type="text" name="minWeight" id="minWeight" class="easyui-numberbox" data-options="min:0,required:true" onblur="getName()"/>(kg)
+						</td>
+					</tr>
+					<tr>
+						<td>最大重量</td>
+						<td>
+						<input type="text" name="maxWeight" id="maxWeight" class="easyui-numberbox" data-options="min:0,required:true" onblur="getName()"/>(kg)
+						</td>
+					</tr>
+					<tr>
+						<td>最小长度</td>
+						<td>
+						<input type="text" name="minLength" id="minLength" class="easyui-numberbox" data-options="min:0,required:true" onblur="getName()"/>(cm)
+						</td>
+					</tr>
+					<tr>
+						<td>最大长度</td>
+						<td>
+						<input type="text" name="maxLength" id="maxLength" class="easyui-numberbox" data-options="min:0,required:true" onblur="getName()"/>(cm)
+						</td>
+					</tr>
+				</table>
+				</form>
+				<br/><br/>
+				<center><div id="msg"></div></center>
+			</div>
+			
+		</div>
 		<!-- 添加取派员窗体  -->
-	<div class="easyui-window" title="对收派员进行添加或者修改" id="addStaffWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
+	<%-- <div class="easyui-window" title="对收派员进行添加或者修改" id="addStaffWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
 		<div region="north" style="height:31px;overflow:hidden;" split="false" border="false" >
 			<div class="datagrid-toolbar">
 				<a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
@@ -193,7 +321,7 @@
 					</table>
 			</form>
 		</div>
-	</div>
+	</div> --%>
 	</body>
 
 </html>

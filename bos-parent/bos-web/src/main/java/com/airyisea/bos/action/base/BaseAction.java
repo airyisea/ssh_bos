@@ -95,15 +95,15 @@ public abstract class BaseAction<T> extends ActionSupport implements ModelDriven
 	}
 	
 	// 分页操作 接受页面 和 每页显示记录
-	protected int pageNum = 1;// 页码
-	protected int pageSize = 10;// 每页显示记录数
+	protected int page = 1;// 页码
+	protected int rows = 10;// 每页显示记录数
 
-	public void setPageNum(int pageNum) {
-		this.pageNum = pageNum;
+	public void setPage(int page) {
+		this.page = page;
 	}
-
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
+	public void setRows(int rows) {
+		this.rows = rows;
 	}
+	
 
 }

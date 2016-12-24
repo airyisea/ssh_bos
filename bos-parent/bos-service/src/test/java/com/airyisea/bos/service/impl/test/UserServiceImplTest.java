@@ -20,12 +20,12 @@ public class UserServiceImplTest {
 	@Autowired
 	private DemoDao demoDao;
 	
-	/*@Test
+	@Test
 	public void testSave() {
 		User user = new User("张三", "123456");
 		userService.save(user);
 	}
-*/
+
 	@Test
 	public void testFindById() {
 		User user = userService.findById(1);

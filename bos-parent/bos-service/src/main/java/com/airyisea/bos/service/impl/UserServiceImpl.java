@@ -41,12 +41,17 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void updateUser(User user) {
-		user.setPassword(MD5Utils.getPwd(user.getPassword()));
 		userDao.save(user);
 	}
 	@Override
 	public User login(String name,String password){
 		return userDao.findByUsernameAndPassword(name, MD5Utils.getPwd(password));
+	}
+
+	@Override
+	public void changePassword(String newPwd, Integer id) {
+		userDao.updatePassword(MD5Utils.getPwd(newPwd),id);
+		
 	}
 	
 
