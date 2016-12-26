@@ -111,22 +111,22 @@
 			
 			var newPwd = $("#txtNewPass").val();
 			if(newPwd == null || newPwd == "") {
-				$.messager.alert("错误","密码不能为空","warring");
+				$.messager.alert("错误","密码不能为空","warning");
 				return;
 			}
 			var reg = /\s+/;
 			if(reg.test(newPwd)){
-				$.messager.alert("错误","密码不能包含空格","warring");
+				$.messager.alert("错误","密码不能包含空格","warning");
 				return;
 			}
 			
 			if(newPwd.length <3 || newPwd.length > 16) {
-				$.messager.alert("错误","密码必须为3-16位","warring");
+				$.messager.alert("错误","密码必须为3-16位","warning");
 				return;
 			}
 			
 			if(newPwd != $("#txtRePass").val()){
-				$.messager.alert("错误","两次密码不一致","warring");
+				$.messager.alert("错误","两次密码不一致","warning");
 				return;
 			}
 			
@@ -166,7 +166,7 @@
 	<div data-options="region:'north',border:false"
 		style="height:80px;padding:10px;background:url('${pageContext.request.contextPath}/images/header_bg.png') no-repeat right;">
 		<img alt="宅急送"
-			src="${pageContext.request.contextPath}/images/logo.png"/>
+			src="${pageContext.request.contextPath}/images/logo.png" border="0"/>
 		<!-- 当前用户信息 -->
 		<div style="position:absolute;right: 20px;top:10px;">
 			[<strong>${loginUser.username}</strong>]，欢迎你！您使用[<strong>${pageContext.request.remoteAddr}</strong>]IP登录!

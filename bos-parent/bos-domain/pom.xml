@@ -53,8 +53,16 @@
   	<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-tools</artifactId>
-		</dependency>
-  </dependencies>
+	</dependency>
+	<dependency>
+  		<groupId>org.apache.struts</groupId>
+  		<artifactId>struts2-json-plugin</artifactId>
+  	</dependency>
+	<dependency>
+		<groupId>com.alibaba</groupId>
+		<artifactId>fastjson</artifactId>
+	</dependency>
+   </dependencies>
    
   <build>
      <plugins>

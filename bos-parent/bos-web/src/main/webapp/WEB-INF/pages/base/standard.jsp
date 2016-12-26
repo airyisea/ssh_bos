@@ -73,6 +73,7 @@
 					}
 					
 				});
+				
 			});	
 			//生成取派标准名称
 			getName = function(){
@@ -82,7 +83,6 @@
 				var maxLength = $("#maxLength").val();
 				if(maxWeight && minWeight) {
 					if((maxWeight - minWeight) <= 0) {
-						$("#msg").html("<font color='red'>最大重量不能小于最小重量</font>");
 						$("#name").val("");
 						return;
 					}
@@ -90,26 +90,51 @@
 				
 				if(minLength && maxLength) {
 					if((maxLength - minLength) <= 0) {
-						$("#msg").html("<font color='red'>最大长度不能小于最小长度</font>");
 						$("#name").val("");
 						return;
 					}
 				}
 				if(minWeight && maxWeight && minLength && maxLength) {
 					var name = minWeight + "kg-" + maxWeight + "kg;" + minLength + "cm-" + maxLength + "cm";
-					$.post("${pageContext.request.contextPath}/basic/standard_checkName",{name:name},function(data){
-						if(data){
-							$("#name").val(name);
-							$("#msg").html("");
-							
-						}else{
-							$("#name").val("");
-							$("#msg").html("<font color='red'>已存在相同标准</font>");
-						}
-					})
+					$("#name").val(name);
 				}
 				
 			}
+		
+			//自定义校验器
+			$.extend($.fn.validatebox.defaults.rules, { 
+				weight: { 
+				validator: function(value, param){ 
+				return (value - $("#minWeight").val()) > 0; 
+				}, 
+				message: '最大重量不能小于最小重量' 
+				},
+				length: { 
+				validator: function(value, param){ 
+				return (value - $("#minLength").val()) > 0; 
+				}, 
+				message: '最大长度不能小于最小长度' 
+				},
+				uniqueName: { 
+				validator: function(value, param){ 
+					var flag_name;
+					$.ajax({
+						url:"${pageContext.request.contextPath}/basic/standard_checkName",
+						type : "POST",
+						timeout : 6000,
+						data : {name:value},
+						async : false,
+						success : function(data, textStatus, jqXHR){
+							flag_name = data;
+						}
+						
+					});
+					return flag_name;
+				}, 
+				message: '已存在相同标准' 
+				}
+				
+			}); 
 			
 			
 			//工具栏
@@ -129,15 +154,17 @@
 					var data = $("#grid").datagrid("getSelections");
 					if(data.length == 1) {
 						$('#addStandardWindow').window("open");
+						$("#name").validatebox("remove");
 						//将数据封装入表单
-						$("#id").val(data[0].id);
+						/* $("#id").val(data[0].id);
 						$("#name").val(data[0].name);
 						$("#minWeight").val(data[0].minWeight);
 						$("#maxWeight").val(data[0].maxWeight);
 						$("#minLength").val(data[0].minLength);
-						$("#maxLength").val(data[0].maxLength);
+						$("#maxLength").val(data[0].maxLength); */
+						$("#standardForm").form("load",data[0]);
 					}else {
-						$.messager.alert("错误","请选择一条数据","warring");
+						$.messager.alert("错误","请选择一条数据","warning");
 					}
 				}
 			},{
@@ -166,13 +193,6 @@
 						})
 					}
 
-				}
-			},{
-				id : 'button-restore',
-				text : '还原',
-				iconCls : 'icon-save',
-				handler : function(){
-					alert('还原');
 				}
 			}];
 			
@@ -221,6 +241,20 @@
 				width : 120,
 				align : 'center'
 			} ] ];
+			//去除样式js 封装函数
+			$.extend($.fn.validatebox.methods, {
+				//  去除validatebox 非法校验样式
+			    remove: function (jq, newposition) {
+		              return $(jq).removeClass("validatebox-text validatebox-invalid");
+			    },
+		    	//样式还原
+			    reduce: function (jq, newposition) {
+			        return jq.each(function () {
+			            var opt = $(this).data().validatebox.options;
+			            $(this).addClass("validatebox-text").validatebox(opt);
+			        });
+			    }
+			});
 		</script>
 	</head>
 
@@ -233,7 +267,7 @@
 				<a id="save" icon="icon-save" href="javascript:void(0);" class="easyui-linkbutton" plain="true">保存</a>
 			</div>
 			<div data-options="region:'center'" style="overflow:auto;padding:5px;" border="false">
-				<form id="standardForm" action="${pageContext.request.contextPath}/basic/standard_add">
+				<form id="standardForm" action="${pageContext.request.contextPath}/basic/standard_add" method="post">
 				<table class="table-edit" width="80%" align="center">
 					<tr class="title">
 						<td colspan="2">取派标准信息</td>
@@ -242,7 +276,7 @@
 						<td>取派标准名称</td>
 						<td>
 						<input type="hidden" name="id" id="id"/>
-						<input type="text" name="name" class="easyui-validatebox" data-options="required:true" readonly="readonly" id = "name"/>
+						<input type="text" name="name" class="easyui-validatebox" data-options="required:true,validType:'uniqueName'" readonly="readonly" id = "name"/>
 						</td>
 					</tr>
 					<tr>
@@ -254,7 +288,7 @@
 					<tr>
 						<td>最大重量</td>
 						<td>
-						<input type="text" name="maxWeight" id="maxWeight" class="easyui-numberbox" data-options="min:0,required:true" onblur="getName()"/>(kg)
+						<input type="text" name="maxWeight" id="maxWeight" class="easyui-numberbox" data-options="min:0,required:true,validType:'weight'" onblur="getName()"/>(kg)
 						</td>
 					</tr>
 					<tr>
@@ -266,7 +300,7 @@
 					<tr>
 						<td>最大长度</td>
 						<td>
-						<input type="text" name="maxLength" id="maxLength" class="easyui-numberbox" data-options="min:0,required:true" onblur="getName()"/>(cm)
+						<input type="text" name="maxLength" id="maxLength" class="easyui-numberbox" data-options="min:0,required:true,validType:'length'" onblur="getName()"/>(cm)
 						</td>
 					</tr>
 				</table>
@@ -274,54 +308,7 @@
 				<br/><br/>
 				<center><div id="msg"></div></center>
 			</div>
-			
 		</div>
-		<!-- 添加取派员窗体  -->
-	<%-- <div class="easyui-window" title="对收派员进行添加或者修改" id="addStaffWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
-		<div region="north" style="height:31px;overflow:hidden;" split="false" border="false" >
-			<div class="datagrid-toolbar">
-				<a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
-			</div>
-		</div>
-		
-		<div region="center" style="overflow:auto;padding:5px;" border="false">
-			<form id="addStaffForm" method="post" action="${pageContext.request.contextPath }/bc/staffAction_save">
-				<table class="table-edit" width="80%" align="center">
-					<tr class="title">
-						<td colspan="2">收派员信息</td>
-					</tr>
-					<tr>
-						<td>姓名</td>
-						<td>
-						<input type="hidden" name="id" id="id"/>
-						<input type="text" name="name" class="easyui-validatebox" data-options="required:true"/></td>
-					</tr>
-					<tr>
-						<td>手机</td>
-						<td><input id="tel" type="text" name="telephone" class="easyui-validatebox" 
-						   data-options="required:true,validType:['telephone','uniquePhone']"/>
-						   <span id="tel_sp"></span>
-						   </td>
-					</tr>
-					<tr>
-						<td>单位</td>
-						<td><input type="text" name="station" class="easyui-validatebox" required="true"/></td>
-					</tr>
-					<tr>
-						<td colspan="2">
-						<input type="checkbox" name="haspda" value="1" />
-						是否有PDA</td>
-					</tr>
-					<tr>
-						<td>取派标准</td>
-						<td>
-							<input type="text" name="standard" class="easyui-validatebox" required="true"/>  
-						</td>
-					</tr>
-					</table>
-			</form>
-		</div>
-	</div> --%>
 	</body>
 
 </html>

@@ -14,6 +14,9 @@
 	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
 
 	<package name="bos" extends="json-default">
+		<result-types>
+			<result-type name="fastJson" class="fastJson"></result-type>
+		</result-types>
 		<interceptors>
 			<interceptor name="loginInterceptor" class="loginInterceptor">
 				<param name="excludeMethods">login,checkcode</param>
@@ -26,6 +29,13 @@
 		<default-interceptor-ref name="myStack"/>
 		<global-results>
 			<result name="no_login">/login.jsp</result>
+			<!-- 分页查询结果集 -->
+			<result name="queryPage" type="fastJson">
+				<param name="root">pageData</param>
+			</result>
+			<result name="fast" type="fastJson">
+				<param name="root">test</param>
+			</result>
 		</global-results>
 		<action name="index">
 			<result>/index.jsp</result>

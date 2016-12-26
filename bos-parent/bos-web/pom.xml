@@ -28,10 +28,6 @@
   	</dependency>
   	<dependency>
   		<groupId>org.apache.struts</groupId>
-  		<artifactId>struts2-json-plugin</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.struts</groupId>
   		<artifactId>struts2-convention-plugin</artifactId>
   	</dependency>
   	<dependency>
@@ -49,6 +45,14 @@
   		<artifactId>junit</artifactId>
   		<scope>test</scope>
   	</dependency>
+  	<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+		</dependency>
   </dependencies>
   <build>
      <plugins>

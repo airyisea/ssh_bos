@@ -3,11 +3,50 @@
 
 <hibernate-reverse-engineering>
   <schema-selection  match-table="t_user"  match-catalog="bos"/>
+  <schema-selection  match-table="t_standard"  match-catalog="bos"/>
+  <schema-selection  match-table="bc_.*"  match-catalog="bos"/>
 	<!-- 实体类生成规则定义 -->
 	<table name="t_user" catalog="bos"
 		class="com.airyisea.bos.domain.user.User">
 		<primary-key>
 			<generator class="native"></generator>
+		</primary-key>
+	</table>
+	<table name="t_standard" catalog="bos"
+		class="com.airyisea.bos.domain.basic.Standard">
+		<primary-key>
+			<generator class="native"></generator>
+		</primary-key>
+		<column name="minweight" property="minWeight"></column>
+		<column name="maxweight" property="maxWeight"></column>
+		<column name="minlength" property="minLength"></column>
+		<column name="maxlength" property="maxLength"></column>
+		<column name="operatingtime" property="operatingTime"></column>
+		<column name="operatorstation" property="operatorStation"></column>
+	</table>
+	<!-- 基础设置表 -->
+	<table name="bc_staff" catalog="bos"
+		class="com.airyisea.bos.domain.basic.Staff">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+	<table name="bc_region" catalog="bos"
+		class="com.airyisea.bos.domain.basic.Region">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+	<table name="bc_subarea" catalog="bos"
+		class="com.airyisea.bos.domain.basic.Subarea">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+	<table name="bc_decidedzone" catalog="bos"
+		class="com.airyisea.bos.domain.basic.DecidedZone">
+		<primary-key>
+			<generator class="uuid"></generator>
 		</primary-key>
 	</table>
 </hibernate-reverse-engineering>
