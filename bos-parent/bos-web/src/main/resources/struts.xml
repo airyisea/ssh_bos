@@ -26,15 +26,12 @@
 				<interceptor-ref name="defaultStack"></interceptor-ref>
 			</interceptor-stack>
 		</interceptors>
-		<default-interceptor-ref name="myStack"/>
+		<!-- <default-interceptor-ref name="myStack"/> -->
 		<global-results>
 			<result name="no_login">/login.jsp</result>
 			<!-- 分页查询结果集 -->
-			<result name="queryPage" type="fastJson">
+			<result name="queryPage" type="json">
 				<param name="root">pageData</param>
-			</result>
-			<result name="fast" type="fastJson">
-				<param name="root">test</param>
 			</result>
 		</global-results>
 		<action name="index">

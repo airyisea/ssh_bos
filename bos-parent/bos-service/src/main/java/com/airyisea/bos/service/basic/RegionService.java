@@ -21,4 +21,8 @@ public interface RegionService {
 	Page<Region> queryPage(Specification<Region> andCondition,
 			Pageable pageRequest);
 
+	List<Region> queryList();
+
+	List<Region> queryList(String parameter);
+
 }

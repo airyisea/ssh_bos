@@ -170,6 +170,104 @@ public abstract class BaseAction<T> extends ActionSupport implements ModelDriven
 	 * @param param:需要模糊查询的属性
 	 * @return
 	 */
+	protected Specification<T> getLikeCondition(final T t,final String...params) {
+		Specification<T> condition = new Specification<T>() {
+			@Override
+			public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
+					CriteriaBuilder cb) {
+				try {
+					//将需要进行查询的条件装入list
+					List<String> paramList = new ArrayList<String>();
+					for (int i = 0; i < params.length; i++) {
+						paramList.add(params[i]);
+					}
+					List<Predicate> plist = new ArrayList<Predicate>();
+					//获取查询对象的字节码文件
+					Class<? extends T> clazz = root.getJavaType();
+					//内省
+					BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
+					PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
+					//遍历属性描述器
+					for (PropertyDescriptor pd : pds) {
+						String name = pd.getName();
+						//该属性是否要进行查询
+						if(paramList.contains(name)) {
+							//获取查询参数
+							Object param = pd.getReadMethod().invoke(t);
+							if(param != null && !"".equals(param)) {
+								//创建查询对象装入list中
+								Predicate p = cb.like(root.get(name).as(String.class), "%" + param + "%");
+								plist.add(p);
+							}
+						}
+					}
+					Predicate[] predicates = new Predicate[plist.size()];
+					
+					return cb.and(plist.toArray(predicates));
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null;
+				}
+			}
+		};
+		
+		return condition;
+	}
+	/**
+	 * 获取进行精确查询的Specification
+	 * @param param:需要精确查询的属性
+	 * @return
+	 */
+	protected Specification<T> getEqCondition(final T t,final String...params) {
+		Specification<T> condition = new Specification<T>() {
+			@Override
+			public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
+					CriteriaBuilder cb) {
+				try {
+					//将需要进行查询的条件装入list
+					List<String> paramList = new ArrayList<String>();
+					for (int i = 0; i < params.length; i++) {
+						paramList.add(params[i]);
+					}
+					List<Predicate> plist = new ArrayList<Predicate>();
+					//获取查询对象的字节码文件
+					Class<? extends T> clazz = root.getJavaType();
+					//内省
+					BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
+					PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
+					//遍历属性描述器
+					for (PropertyDescriptor pd : pds) {
+						String name = pd.getName();
+						//该属性是否要进行查询
+						if(paramList.contains(name)) {
+							//获取查询参数
+							Object param = pd.getReadMethod().invoke(t);
+							//获取属性的类型
+							Class<?> returnType = pd.getReadMethod().getReturnType();
+							if(param != null && !"".equals(param)) {
+								//创建查询对象装入list中
+								Predicate p = cb.equal(root.get(name).as(returnType), param);
+								plist.add(p);
+							}
+						}
+					}
+					Predicate[] predicates = new Predicate[plist.size()];
+					
+					return cb.and(plist.toArray(predicates));
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null;
+				}
+			}
+		};
+		
+		return condition;
+	}
+	/**
+	 * 获取进行模糊查询的Specification
+	 * @param param:需要模糊查询的属性
+	 * @return
+	 */
 	protected Specification<T> getLikeCondition(final String...params) {
 		Specification<T> condition = new Specification<T>() {
 			@Override
@@ -194,7 +292,7 @@ public abstract class BaseAction<T> extends ActionSupport implements ModelDriven
 						if(paramList.contains(name)) {
 							//获取查询参数
 							Object param = pd.getReadMethod().invoke(model);
-							if(param != null) {
+							if(param != null && !"".equals(param)) {
 								//创建查询对象装入list中
 								Predicate p = cb.like(root.get(name).as(String.class), "%" + param + "%");
 								plist.add(p);

@@ -1,17 +1,6 @@
 package com.airyisea.bos.action.basic;
 
 
-import java.beans.BeanInfo;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -24,7 +13,7 @@ import org.springframework.stereotype.Controller;
 
 import com.airyisea.bos.action.base.BaseAction;
 import com.airyisea.bos.domain.basic.Staff;
-@SuppressWarnings("serial")
+@SuppressWarnings("all")
 @Controller("staffAction")
 @Scope("prototype")
 @Namespace("/basic")
@@ -40,7 +29,7 @@ public class StaffAction extends BaseAction<Staff> {
 	 * @throws Exception
 	 */
 	@Action(value="staff_checkPhone",results={@Result(name="checkPhone",type="json")})
-	public String checkPhone() throws Exception {
+	public String checkPhone() {
 		Staff existStaff = facadeService.getStaffService().checkPhone(model.getTelephone());
 		if(existStaff != null) {
 			//已经存在相同标准
@@ -56,7 +45,7 @@ public class StaffAction extends BaseAction<Staff> {
 	 * @throws Exception
 	 */
 	@Action(value="staff_queryPage")
-	public String queryPage() throws Exception {
+	public String queryPage() {
 		
 		Specification<Staff> c1 = getEqCondition("telephone","standard");
 		Specification<Staff> c2 = getLikeCondition("name","station");
@@ -72,7 +61,7 @@ public class StaffAction extends BaseAction<Staff> {
 	 * @throws Exception
 	 */
 	@Action(value="staff_deleteBatch",results={@Result(name="deleteBatch",type="json")})
-	public String deleteBatch() throws Exception {
+	public String deleteBatch() {
 		try {
 			String ids = getParameter("ids");
 			if(StringUtils.isNotBlank(ids)) {
@@ -97,7 +86,7 @@ public class StaffAction extends BaseAction<Staff> {
 	 * @throws Exception
 	 */
 	@Action(value="staff_restoreBatch",results={@Result(name="restoreBatch",type="json")})
-	public String restoreBatch() throws Exception {
+	public String restoreBatch() {
 		try {
 			String ids = getParameter("ids");
 			if(StringUtils.isNotBlank(ids)) {
@@ -125,7 +114,7 @@ public class StaffAction extends BaseAction<Staff> {
 	 * @throws Exception
 	 */
 	@Action(value="staff_add",results={@Result(name="add",location="/WEB-INF/pages/base/staff.jsp")})
-	public String add() throws Exception {
+	public String add() {
 		facadeService.getStaffService().add(model);
 		return "add";
 	}

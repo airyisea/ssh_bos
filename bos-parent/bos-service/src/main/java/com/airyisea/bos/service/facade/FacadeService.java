@@ -7,6 +7,7 @@ import com.airyisea.bos.service.UserService;
 import com.airyisea.bos.service.basic.RegionService;
 import com.airyisea.bos.service.basic.StaffService;
 import com.airyisea.bos.service.basic.StandardService;
+import com.airyisea.bos.service.basic.SubareaService;
 @Service("facadeService")
 public class FacadeService {
 	@Autowired
@@ -17,6 +18,8 @@ public class FacadeService {
 	private StaffService staffService;
 	@Autowired
 	private RegionService regionService;
+	@Autowired
+	private SubareaService subareaService;
 	
 	public StandardService getStandardService() {
 		return standardService;
@@ -32,6 +35,10 @@ public class FacadeService {
 
 	public RegionService getRegionService() {
 		return regionService;
+	}
+
+	public SubareaService getSubareaService() {
+		return subareaService;
 	}
 	
 	

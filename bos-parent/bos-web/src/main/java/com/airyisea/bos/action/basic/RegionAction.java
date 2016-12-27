@@ -1,19 +1,9 @@
 package com.airyisea.bos.action.basic;
 
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -31,7 +21,7 @@ import org.springframework.stereotype.Controller;
 import com.airyisea.bos.action.base.BaseAction;
 import com.airyisea.bos.domain.basic.Region;
 import com.airyisea.bos.utils.PinYin4jUtils;
-@SuppressWarnings("serial")
+@SuppressWarnings("all")
 @Controller("regionAction")
 @Scope("prototype")
 @Namespace("/basic")
@@ -46,27 +36,27 @@ public class RegionAction extends BaseAction<Region> {
 	 * @throws Exception
 	 */
 	@Action(value="region_importRegion",results={@Result(name="importRegion",type="json")})
-	public String importRegion() throws Exception {
-		List<Region> list = new ArrayList<Region>();
-		//获取工作簿
-		HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(upload));
-		HSSFSheet sheet = wb.getSheetAt(0);
-		//遍历每行记录,插入集合中
-		for (Row row : sheet) {
-			if(row.getRowNum() == 0) {
-				continue;
-			}
-			Region region = new Region();
-			region.setId(row.getCell(0).getStringCellValue());
-			region.setProvince(row.getCell(1).getStringCellValue());
-			region.setCity(row.getCell(2).getStringCellValue());
-			region.setDistrict(row.getCell(3).getStringCellValue());
-			region.setPostcode(row.getCell(4).getStringCellValue());
-			region.setCitycode(getCitycode(region.getCity()));
-			region.setShortcode(getShortcode(region.getProvince(),region.getCity(),region.getDistrict()));
-			list.add(region);
-		}
+	public String importRegion() {
 		try {
+			List<Region> list = new ArrayList<Region>();
+			//获取工作簿
+			HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(upload));
+			HSSFSheet sheet = wb.getSheetAt(0);
+			//遍历每行记录,插入集合中
+			for (Row row : sheet) {
+				if(row.getRowNum() == 0) {
+					continue;
+				}
+				Region region = new Region();
+				region.setId(row.getCell(0).getStringCellValue());
+				region.setProvince(row.getCell(1).getStringCellValue());
+				region.setCity(row.getCell(2).getStringCellValue());
+				region.setDistrict(row.getCell(3).getStringCellValue());
+				region.setPostcode(row.getCell(4).getStringCellValue());
+				region.setCitycode(getCitycode(region.getCity()));
+				region.setShortcode(getShortcode(region.getProvince(),region.getCity(),region.getDistrict()));
+				list.add(region);
+			}
 			//调用批量保存方法
 			facadeService.getRegionService().save(list);
 			push(true);
@@ -82,7 +72,7 @@ public class RegionAction extends BaseAction<Region> {
 	 * @throws Exception
 	 */
 	@Action(value="region_queryPage")
-	public String queryPage() throws Exception {
+	public String queryPage() {
 		
 		Specification<Region> c1 = getLikeCondition("province","city","district","shortcode");
 		Specification<Region> c2 = getEqCondition("id");
@@ -90,9 +80,13 @@ public class RegionAction extends BaseAction<Region> {
 		setPageResponse(pageResponse);
 		return "queryPage";
 	}
-	
+	/**
+	 * 校验id是否重复
+	 * @return
+	 * @throws Exception
+	 */
 	@Action(value="region_checkId",results={@Result(name="checkId",type="json")})
-	public String checkId() throws Exception {
+	public String checkId() {
 		Region existRegion = facadeService.getRegionService().checkId(model.getId());
 		if(existRegion == null) {
 			push(true);
@@ -102,16 +96,27 @@ public class RegionAction extends BaseAction<Region> {
 		return "checkId";
 	}
 	
+	/**
+	 * 根据省/市/区模糊查询
+	 * @return
+	 * @throws Exception
+	 */
+	@Action(value="region_list",results={@Result(name="list",type="json")})
+	public String list() {
+		List<Region> list = facadeService.getRegionService().queryList(getParameter("q"));
+		push(list);
+		return "list";
+	}
 	
 	
-	//======================ajax===========================================
+	//=================================================================
 	/**
 	 * 添加区域
 	 * @return
 	 * @throws Exception
 	 */
 	@Action(value="region_add",results={@Result(name="add",location="/WEB-INF/pages/base/region.jsp")})
-	public String add() throws Exception {
+	public String add() {
 		if(StringUtils.isBlank(model.getCitycode())) {
 			model.setCitycode(getCitycode(model.getCity()));
 		}
@@ -122,6 +127,7 @@ public class RegionAction extends BaseAction<Region> {
 		return "add";
 	}
 	
+	//============================================================
 	/**
 	 * 获取区域拼音首字母
 	 * @param province:省
@@ -178,60 +184,4 @@ public class RegionAction extends BaseAction<Region> {
 		}
 	}
 	
-	
-	/**
-	 * 获取条件查询Specification的实例
-	 * @return
-	 */
-	private Specification<Region> getCondition() {
-		Specification<Region> condition = new Specification<Region>() {
-			@Override
-			public Predicate toPredicate(Root<Region> root, CriteriaQuery<?> query,
-					CriteriaBuilder cb) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		};
-			
-		return condition;
-	}
-	
-	/**
-	 * @param param:需要查询的属性
-	 * @return
-	 */
-	private Specification<Region> getCondition(final String...params) {
-		Specification<Region> condition = new Specification<Region>() {
-			@Override
-			public Predicate toPredicate(Root<Region> root, CriteriaQuery<?> query,
-					CriteriaBuilder cb) {
-				try {
-					List<String> paramList = new ArrayList<String>();
-					for (int i = 0; i < params.length; i++) {
-						paramList.add(params[i]);
-					}
-					List<Predicate> plist = new ArrayList<Predicate>();
-					Class<? extends Region> clazz = root.getJavaType();
-					BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
-					PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
-					for (PropertyDescriptor pd : pds) {
-						String name = pd.getName();
-						if(paramList.contains(name)) {
-							Object param = pd.getReadMethod().invoke(model);
-							Predicate p = cb.like(root.get(name).as(String.class), "%" + param + "%");
-							plist.add(p);
-						}
-					}
-					Predicate[] predicates = new Predicate[plist.size()];
-					return cb.and(plist.toArray(predicates));
-				} catch (Exception e) {
-					e.printStackTrace();
-					return null;
-				}
-			}
-		};
-		
-		return condition;
-	}
-
 }

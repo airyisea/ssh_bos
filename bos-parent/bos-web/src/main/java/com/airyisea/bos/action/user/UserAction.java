@@ -21,7 +21,7 @@ public class UserAction extends BaseAction<User> {
 	//=============================ajax================================================
 	//校验验证码
 	@Action(value="user_checkcode",results={@Result(name="checkcode",type="json")})
-	public String checkcode() throws Exception {
+	public String checkcode() {
 		String ajax_code = getParameter("checkcode");
 		String session_code = (String) getSessionAttribute("key");
 		boolean checkcode_flag = false;
@@ -36,7 +36,7 @@ public class UserAction extends BaseAction<User> {
 	
 	//修改密码
 	@Action(value="user_changePassword",results={@Result(name="changePassword",type="json")})
-	public String changePassword() throws Exception {
+	public String changePassword() {
 		try {
 			//1:修改成功,0:服务器异常,-1:密码必须为3-16位,-2:两次密码不一致,-3:与原密码一致
 			String newPwd = getParameter("newPwd");
@@ -72,7 +72,7 @@ public class UserAction extends BaseAction<User> {
 	@Action(value="user_login",results={@Result(name="login_success",location="/index.jsp",type="redirect"),
 										@Result(name="login_fail",location="/login.jsp"),
 										@Result(name="input",location="/login.jsp")})
-	public String login() throws Exception {
+	public String login() {
 		String ajax_code = getParameter("checkcode");
 		removeSessionAttribute("checkcode");
 		//验证码是否为空

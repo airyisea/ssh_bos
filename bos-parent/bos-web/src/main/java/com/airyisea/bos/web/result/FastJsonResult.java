@@ -10,6 +10,7 @@ import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.Result;
 import com.opensymphony.xwork2.util.ValueStack;
 
+@SuppressWarnings("serial")
 @Component("fastJson")
 public class FastJsonResult implements Result{
 	private String root;

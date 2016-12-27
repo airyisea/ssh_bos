@@ -30,7 +30,10 @@
 	src="${pageContext.request.contextPath }/js/oneclickupload/jquery.ocupload-1.1.2.js"
 	type="text/javascript"></script>
 <script type="text/javascript">
+	
+	
 	function doAdd(){
+		$("#tr_id").css("display","");
 		$('#addRegionWindow').window("open");
 	}
 	
@@ -40,9 +43,9 @@
 	
 	
 	function doUpdate(index,data) {
-		$("#addRegionWindow").window("open");
 		$("#_id").validatebox("remove");
-		$("#_id").prop("readonly","readonly");
+		$("#tr_id").css("display","none");
+		$("#addRegionWindow").window("open");
 		$("#addRegionForm").form("load",data);
 	}
 	
@@ -257,10 +260,10 @@
 		<div region="center" style="overflow:auto;padding:5px;" border="false">
 			<form id="addRegionForm" method="post" action="${pageContext.request.contextPath}/basic/region_add">
 				<table class="table-edit" width="80%" align="center">
-					<tr class="title">
+					<tr class="title" id="_title">
 						<td colspan="2">区域信息</td>
 					</tr>
-					<tr>
+					<tr id="tr_id">
 						<td>区域编码</td>
 						<td><input type="text" name="id" class="easyui-validatebox" 
 						required="true" id="_id"  data-options="validType:'uniqueId'"/></td>
