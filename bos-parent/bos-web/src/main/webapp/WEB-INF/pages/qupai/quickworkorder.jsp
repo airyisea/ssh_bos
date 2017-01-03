@@ -30,11 +30,10 @@
 	var editIndex ;
 	
 	function doAdd(){
-		if(editIndex != undefined){
+		/* if(editIndex != undefined){
 			$("#grid").datagrid('endEdit',editIndex);
-		}
+		} */
 		if(editIndex==undefined){
-			//alert("快速添加电子单...");
 			$("#grid").datagrid('insertRow',{
 				index : 0,
 				row : {}
@@ -79,14 +78,15 @@
 	var columns = [ [ {
 		field : 'id',
 		title : '工作单号',
+		checkbox : true,
 		width : 120,
 		align : 'center',
-		editor :{
+		/* editor :{
 			type : 'validatebox',
 			options : {
 				required: true
 			}
-		}
+		} */
 	}, {
 		field : 'arrivecity',
 		title : '到达地',
@@ -155,29 +155,45 @@
 			border : true,
 			rownumbers : true,
 			striped : true,
-			pageList: [30,50,100],
+			pageList: [3,5,10],
 			pagination : true,
 			toolbar : toolbar,
-			url :  "",
+			url :  "${pageContext.request.contextPath}/qp/workordermanage_queryPage",
 			idField : 'id',
 			columns : columns,
 			onDblClickRow : doDblClickRow,
 			onAfterEdit : function(rowIndex, rowData, changes){
-				console.info(rowData);
+				$.post("${pageContext.request.contextPath}/qp/workordermanage_add",rowData,function(data){
+					if(!data) {
+						$.messager.alert("错误","添加失败!","error");
+					}else {
+						$("#grid").datagrid('reload');
+					}
+				});
 				editIndex = undefined;
 			}
 		});
 	});
 
 	function doDblClickRow(rowIndex, rowData){
-		alert("双击表格数据...");
-		console.info(rowIndex);
-		$('#grid').datagrid('beginEdit',rowIndex);
-		editIndex = rowIndex;
+		if(editIndex == undefined) {
+			$('#grid').datagrid('beginEdit',rowIndex);
+			editIndex = rowIndex;
+		}
 	}
+	function qq(value,name){
+		$("#grid").datagrid('load',{'conditionName' : name,'conditionValue' : value});
+		}
 </script>
 </head>
 <body class="easyui-layout" style="visibility:hidden;">
+	<div region="north">
+		<input id="ss" class="easyui-searchbox" style="width:300px" data-options="searcher:qq,prompt:'请输入到达地或产品名',menu:'#mm'"></input> 
+		<div id="mm" style="width:120px"> 
+		<div data-options="name:'arrivecity'">到达地</div>
+		<div data-options="name:'product'">产品</div> 
+		</div>
+	</div>
 	<div region="center" border="false">
     	<table id="grid"></table>
 	</div>

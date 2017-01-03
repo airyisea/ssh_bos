@@ -34,5 +34,10 @@
     			<property name="databasePlatform" value="${jdbc.dialect}"/>
     		</bean>
     	</property>
+    	<property name="jpaProperties">
+    		<props>
+    			<prop key="hibernate.search.default.indexBase">d:/bos_index</prop>
+    		</props>
+    	</property>
     </bean>
 </beans>

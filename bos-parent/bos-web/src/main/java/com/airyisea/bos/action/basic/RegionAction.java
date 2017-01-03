@@ -5,6 +5,11 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -107,6 +112,17 @@ public class RegionAction extends BaseAction<Region> {
 		push(list);
 		return "list";
 	}
+	/**
+	 * 省市区三级联动
+	 * @return
+	 * @throws Exception
+	 */
+	@Action(value="region_getPCDAjax",results={@Result(name="getPCDAjax",type="json")})
+	public String getPCDAjax() {
+		List<String> list = facadeService.getRegionService().getPCD(model.getProvince(),model.getCity());
+		push(list);
+		return "getPCDAjax";
+	}
 	
 	
 	//=================================================================
@@ -183,5 +199,7 @@ public class RegionAction extends BaseAction<Region> {
 			return null;
 		}
 	}
+	
+	
 	
 }

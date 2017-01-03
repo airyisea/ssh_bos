@@ -37,6 +37,45 @@
 				$('#noticebillForm').submit();
 			}
 		});
+		
+		$.post("${pageContext.request.contextPath}/basic/region_getPCDAjax",function(data){
+			$(data).each(function() {
+				$("#province").append("<option value='" + this + "'>" + this + "</option>");
+			})
+		});
+		$("#province").change(function() {
+			$("#city")[0].length = 1;
+			$("#district")[0].length = 1;
+			if(this.value) {
+				$.post("${pageContext.request.contextPath}/basic/region_getPCDAjax",{province:this.value},function(data){
+					$(data).each(function(){
+						$("#city").append("<option value='" + this + "'>" + this + "</option>");
+					});
+				});
+			}
+		});
+		$("#city").change(function() {
+			$("#district")[0].length = 1;
+			if(this.value) {
+				$.post("${pageContext.request.contextPath}/basic/region_getPCDAjax",{"province":$("#province").val(),"city":this.value},function(data){
+					$(data).each(function(){
+						$("#district").append("<option value='" + this + "'>" + this + "</option>");
+					});
+				});
+			}
+		});
+		
+		$("#tel").blur(function() {
+			$("#customerStation").val("");
+			$("#customerName").val("");
+			if(this.value) {
+				$.post("${pageContext.request.contextPath}/qp/noticebill_checkTel",{"telephone" : this.value},function(data) {
+					$("#customerStation").val(data.station);
+					$("#customerName").val(data.name);
+				});
+			}
+		})
+		
 	});
 </script>
 </head>
@@ -51,22 +90,22 @@
 		</div>
 	</div>
 	<div region="center" style="overflow:auto;padding:5px;" border="false">
-		<form id="noticebillForm" action="" method="post">
+		<form id="noticebillForm" action="${pageContext.request.contextPath}/qp/noticebill_add" method="post">
 			<table class="table-edit" width="95%" align="center">
 				<tr class="title">
 					<td colspan="4">客户信息</td>
 				</tr>
 				<tr>
 					<td>来电号码:</td>
-					<td><input type="text" class="easyui-validatebox" name="telephone"
+					<td><input type="text" class="easyui-validatebox" name="telephone" id="tel"
 						required="true" /></td>
-					<td>客户编号:</td>
-					<td><input type="text" class="easyui-validatebox"  name="customerId"
+					<td>客户单位:</td>
+					<td><input type="text" class="easyui-validatebox"  name="customerStation" id="customerStation"
 						required="true" /></td>
 				</tr>
 				<tr>
 					<td>客户姓名:</td>
-					<td><input type="text" class="easyui-validatebox" name="customerName"
+					<td><input type="text" class="easyui-validatebox" name="customerName" id="customerName"
 						required="true" /></td>
 					<td>联系人:</td>
 					<td><input type="text" class="easyui-validatebox" name="delegater"
@@ -93,8 +132,11 @@
 				</tr>
 				<tr>
 					<td>取件地址</td>
-					<td colspan="3"><input type="text" class="easyui-validatebox" name="pickaddress"
-						required="true" size="144"/></td>
+					<td colspan="3">
+					省：<select id="province" name="province"><option value="">--请选择--</option></select>&nbsp;&nbsp;
+					市：<select id="city" name="city"><option value="">--请选择--</option></select>&nbsp;&nbsp;	
+					区：<select id="district" name="district"><option value="">--请选择--</option></select>&nbsp;&nbsp;&nbsp;
+					<input type="text" class="easyui-validatebox" name="pickaddress" required="true" size="77"/></td>
 				</tr>
 				<tr>
 					<td>到达城市:</td>

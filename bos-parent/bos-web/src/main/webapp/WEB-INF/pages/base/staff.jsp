@@ -48,11 +48,11 @@
 			}
 			$.post("${pageContext.request.contextPath}/basic/staff_deleteBatch",{ids : ids.join(",")},function(data){
 				if(data){
-					$.messager.alert("成功","删除成功！","info");
+					$.messager.alert("成功","作废成功！","info");
 					$("#grid").datagrid("uncheckAll");
 					$("#grid").datagrid("reload");
 				}else{
-					$.messager.alert("失败","删除失败","error");
+					$.messager.alert("失败","作废失败","error");
 				}
 			});
 		}else {

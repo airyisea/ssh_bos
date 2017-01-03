@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -67,7 +68,7 @@
 		$.messager.confirm("系统提示","你确定要退出本系统吗？",
 				function(isConfirm){
 					if(isConfirm) {
-						location.href = '${pageContext.request.contextPath }/logout.jsp';
+						location.href = '${pageContext.request.contextPath }/user/user_logout';
 					}
 		});
 	}
@@ -169,7 +170,7 @@
 			src="${pageContext.request.contextPath}/images/logo.png" border="0"/>
 		<!-- 当前用户信息 -->
 		<div style="position:absolute;right: 20px;top:10px;">
-			[<strong>${loginUser.username}</strong>]，欢迎你！您使用[<strong>${pageContext.request.remoteAddr}</strong>]IP登录!
+			[<strong><shiro:principal property="username"></shiro:principal></strong>]，欢迎你！您使用[<strong>${pageContext.request.remoteAddr}</strong>]IP登录!
 		</div>
 		<!-- 更换皮肤和控制面板 -->
 		<div style="position: absolute; right: 5px; bottom: 10px; ">

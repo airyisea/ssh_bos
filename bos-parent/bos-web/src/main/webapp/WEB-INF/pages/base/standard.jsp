@@ -234,7 +234,10 @@
 				field : 'operatingTime',
 				title : '操作时间',
 				width : 120,
-				align : 'center'
+				align : 'center',
+				formatter : function(data, row, index) {
+					return data.replace("T", " ");
+				}
 			}, {
 				field : 'operatorStation',
 				title : '操作单位',

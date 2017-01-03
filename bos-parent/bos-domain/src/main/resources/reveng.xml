@@ -5,6 +5,38 @@
   <schema-selection  match-table="t_user"  match-catalog="bos"/>
   <schema-selection  match-table="t_standard"  match-catalog="bos"/>
   <schema-selection  match-table="bc_.*"  match-catalog="bos"/>
+  <schema-selection  match-table="qp_.*"  match-catalog="bos"/>
+  <schema-selection  match-table="auth_.*"  match-catalog="bos"/>
+  <schema-selection  match-table="user_role"  match-catalog="bos"/>
+  <schema-selection  match-table="role_function"  match-catalog="bos"/>
+  	<!-- 权限认证 -->
+  	<table name="auth_function" catalog="bos"
+		class="com.airyisea.bos.domain.auth.Function">
+	</table>
+  	<table name="auth_role" catalog="bos"
+		class="com.airyisea.bos.domain.auth.Role">
+	</table>
+  
+  	<!-- 取派业务 -->
+  	<table name="qp_noticebill" catalog="bos"
+		class="com.airyisea.bos.domain.qp.NoticeBill">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+  	<table name="qp_workbill" catalog="bos"
+		class="com.airyisea.bos.domain.qp.WorkBill">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+  	<table name="qp_workordermanage" catalog="bos"
+		class="com.airyisea.bos.domain.qp.WorkOrderManage">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
+	</table>
+  	
 	<!-- 实体类生成规则定义 -->
 	<table name="t_user" catalog="bos"
 		class="com.airyisea.bos.domain.user.User">

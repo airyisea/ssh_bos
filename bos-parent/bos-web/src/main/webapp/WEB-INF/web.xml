@@ -12,6 +12,7 @@
   		classpath:applicationContext-domain.xml,
   		classpath:applicationContext-dao.xml,
   		classpath:applicationContext-service.xml,
+  		classpath:applicationContext-shiro.xml,
   		classpath:applicationContext.xml
   	</param-value>
   </context-param>	
@@ -26,6 +27,19 @@
   <filter-mapping>
   	 <filter-name>OpenEntityManagerInViewFilter</filter-name>
   	 <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!-- shiro security filter -->
+  <filter>
+	 <filter-name>shiroSecurityFilter</filter-name>
+	 <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	 <init-param>
+	 	<param-name>targetFilterLifecycle</param-name>
+	 	<param-value>true</param-value>
+	 </init-param>
+  </filter>
+  <filter-mapping>
+	 <filter-name>shiroSecurityFilter</filter-name>
+	 <url-pattern>/*</url-pattern>
   </filter-mapping>
   <!-- struts核心控制器 -->
   <filter>

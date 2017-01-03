@@ -5,10 +5,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.airyisea.bos.dao.user.DemoDao;
 import com.airyisea.bos.domain.user.User;
-import com.airyisea.bos.service.UserService;
+import com.airyisea.bos.service.user.UserService;
 import com.airyisea.bos.utils.MD5Utils;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value={"classpath:applicationContext-domain.xml", 
@@ -24,11 +26,12 @@ public class UserServiceImplTest {
 	public void testSave() {
 		User user = new User("张三", "123456");
 		userService.save(user);
+		//int i = 1/0;
+		System.out.println(user);
 	}
-
 	@Test
 	public void testFindById() {
-		User user = userService.findById(1);
+		User user = userService.findOne(1);
 		System.out.println(user);
 	}
 

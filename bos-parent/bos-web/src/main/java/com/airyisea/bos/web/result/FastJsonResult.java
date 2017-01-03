@@ -6,6 +6,7 @@ import org.apache.struts2.ServletActionContext;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.Result;
 import com.opensymphony.xwork2.util.ValueStack;
@@ -28,7 +29,7 @@ public class FastJsonResult implements Result{
 	@Override
 	public void execute(ActionInvocation invocation) throws Exception {
 		HttpServletResponse response = ServletActionContext.getResponse();
-		String string = JSON.toJSONString(findRootObject(invocation));
+		String string = JSON.toJSONString(findRootObject(invocation),SerializerFeature.DisableCircularReferenceDetect);
 		response.setContentType("text/json;charset=utf-8");
 		response.getWriter().print(string);
 	}

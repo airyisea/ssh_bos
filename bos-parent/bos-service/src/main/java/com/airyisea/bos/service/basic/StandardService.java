@@ -1,20 +1,16 @@
 package com.airyisea.bos.service.basic;
 
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import com.airyisea.bos.domain.basic.Standard;
+import com.airyisea.bos.service.base.BaseService;
 
-public interface StandardService {
-	void add(Standard model);
+public interface StandardService extends BaseService<Standard, Integer>{
+	/*void add(Standard model);
 
-	Standard checkName(String name);
+	List<Standard> findAll();
 
-	Page<Standard> queryPage(Pageable pageable);
+	Page<Standard> queryPage(Pageable pageable);*/
 
 	void deleteBatch(String[] strings);
 
-	List<Standard> queryAll();
+	Standard checkName(String name);
 }

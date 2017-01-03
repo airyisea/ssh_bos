@@ -36,38 +36,48 @@
 				iconCls : 'icon-edit',
 				handler : function() {
 					// 弹出窗口
-					$("#diaoduWindow").window('open');
+					var select = $("#grid").datagrid('getSelected');
+					if(select != null) {
+						$("#noticebillIdView").html(select.id);
+						$("#diaoduWindow").window('open');
+					}
 				}
 			} ],
 			columns : [ [ {
 				field : 'id',
 				title : '编号',
-				width : 100
+				align : 'center',
+				width : 250
 			}, {
 				field : 'delegater',
 				title : '联系人',
+				align : 'center',
 				width : 100
 			}, {
 				field : 'telephone',
 				title : '电话',
+				align : 'center',
 				width : 100
 			}, {
 				field : 'pickaddress',
 				title : '取件地址',
-				width : 100
+				align : 'center',
+				width : 250
 			}, {
 				field : 'product',
 				title : '商品名称',
+				align : 'center',
 				width : 100
 			}, {
 				field : 'pickdate',
 				title : '取件日期',
+				align : 'center',
 				width : 100,
 				formatter : function(data, row, index) {
-					return data.replace("T", " ");
+					return data.substring(0, data.indexOf("T"));
 				}
 			} ] ],
-			url : '${pageContext.request.contextPath}/noticebill_findnoassociations.action'
+			url : '${pageContext.request.contextPath}/qp/noticebill_findnoassociations'
 		});
 
 		// 点击保存按钮，为通知单 进行分单 --- 生成工单
@@ -75,13 +85,16 @@
 
 		});
 	});
+	windowClose = function() {
+		$("#staffId").combobox('reset');
+	}
 </script>
 </head>
 <body class="easyui-layout">
 	<div data-options="region:'center',border:false">
 		<table id="grid"></table>
 	</div>
-	<div class="easyui-window" title="人工调度" id="diaoduWindow" closed="true"
+	<div class="easyui-window" title="人工调度" id="diaoduWindow" closed="true" data-options="onBeforeClose:windowClose"
 		collapsible="false" minimizable="false" maximizable="false"
 		style="top:100px;left:200px;width: 500px; height: 300px">
 		<div region="north" style="height:31px;overflow:hidden;" split="false"
@@ -104,9 +117,9 @@
 					</tr>
 					<tr>
 						<td>选择取派员</td>
-						<td><input class="easyui-combobox" required="true"
+						<td><input class="easyui-combobox" required="true" id="staffId"
 							name="staff.id"
-							data-options="valueField:'id',textField:'name',url:'${pageContext.request.contextPath }/staff_ajaxlist.action'" />
+							data-options="valueField:'id',textField:'name',url:'${pageContext.request.contextPath }/basic/staff_findListAjax'" />
 						</td>
 					</tr>
 				</table>

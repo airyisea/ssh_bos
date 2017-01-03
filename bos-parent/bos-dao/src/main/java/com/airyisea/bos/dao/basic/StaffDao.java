@@ -1,5 +1,7 @@
 package com.airyisea.bos.dao.basic;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,5 +20,8 @@ public interface StaffDao extends JpaRepository<Staff, String>, JpaSpecification
 	@Modifying
 	@Query("update Staff set deltag = '0' where id = ?1")
 	void restore(String string);
+	
+	@Query("from Staff where deltag = '0'")
+	List<Staff> findInUse();
 
 }

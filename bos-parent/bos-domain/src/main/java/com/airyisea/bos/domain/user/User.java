@@ -1,14 +1,22 @@
 package com.airyisea.bos.domain.user;
-// Generated 2016-12-21 15:40:33 by Hibernate Tools 3.2.2.GA
+// Generated 2017-1-3 16:55:38 by Hibernate Tools 3.2.2.GA
 
 
+import com.airyisea.bos.domain.auth.Role;
+import com.airyisea.bos.domain.qp.NoticeBill;
 import java.util.Date;
-
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,32 +28,22 @@ import javax.persistence.TemporalType;
 @Table(name="t_user"
     ,catalog="bos"
 )
-@NamedQuery(name="User.login",query="from User where username = ? and password = ?")
 public class User  implements java.io.Serializable {
 
 
-	private static final long serialVersionUID = -608936425252148884L;
-	
-	private Integer id;
-	private String username;
-	private String password;
-	private Integer salary;
-	private Date birthday;
-	private String gender;
-	private String station;
-	private String telephone;
-	private String remark;
-	
-    @Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password="
-				+ password + ", salary=" + salary + ", birthday=" + birthday
-				+ ", gender=" + gender + ", station=" + station
-				+ ", telephone=" + telephone + ", remark=" + remark + "]";
-	}
+     private Integer id;
+     private String username;
+     private String password;
+     private Integer salary;
+     private Date birthday;
+     private String gender;
+     private String station;
+     private String telephone;
+     private String remark;
+     private Set<Role> roles = new HashSet<Role>(0);
+     private Set<NoticeBill> noticeBills = new HashSet<NoticeBill>(0);
 
-
-	public User() {
+    public User() {
     }
 
 	
@@ -53,7 +51,7 @@ public class User  implements java.io.Serializable {
         this.username = username;
         this.password = password;
     }
-    public User(String username, String password, Integer salary, Date birthday, String gender, String station, String telephone, String remark) {
+    public User(String username, String password, Integer salary, Date birthday, String gender, String station, String telephone, String remark, Set<Role> roles, Set<NoticeBill> noticeBills) {
        this.username = username;
        this.password = password;
        this.salary = salary;
@@ -62,6 +60,8 @@ public class User  implements java.io.Serializable {
        this.station = station;
        this.telephone = telephone;
        this.remark = remark;
+       this.roles = roles;
+       this.noticeBills = noticeBills;
     }
    
      @Id @GeneratedValue
@@ -120,7 +120,7 @@ public class User  implements java.io.Serializable {
         this.gender = gender;
     }
     
-    @Column(name="station",length=40)
+    @Column(name="station", length=40)
     public String getStation() {
         return this.station;
     }
@@ -145,6 +145,25 @@ public class User  implements java.io.Serializable {
     
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    @JoinTable(name="user_role", catalog="bos", joinColumns = { 
+        @JoinColumn(name="user_id", nullable=false, updatable=false) }, inverseJoinColumns = { 
+        @JoinColumn(name="role_id", nullable=false, updatable=false) })
+    public Set<Role> getRoles() {
+        return this.roles;
+    }
+    
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="user")
+    public Set<NoticeBill> getNoticeBills() {
+        return this.noticeBills;
+    }
+    
+    public void setNoticeBills(Set<NoticeBill> noticeBills) {
+        this.noticeBills = noticeBills;
     }
 
 

@@ -1,6 +1,8 @@
 package com.airyisea.bos.action.basic;
 
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -53,7 +55,17 @@ public class StaffAction extends BaseAction<Staff> {
 		setPageResponse(pageResponse);
 		return "queryPage";
 	}
-	
+	/**
+	 * 查询收派员列表
+	 * @return
+	 * @throws Exception
+	 */
+	@Action(value="staff_findListAjax",results={@Result(name="findListAjax",type="json")})
+	public String findListAjax() {
+		List<Staff> list = facadeService.getStaffService().findInUseList();
+		push(list);
+		return "findListAjax";
+	}
 	
 	/**
 	 * 批量作废收派员

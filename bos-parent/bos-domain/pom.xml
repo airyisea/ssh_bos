@@ -62,6 +62,14 @@
 		<groupId>com.alibaba</groupId>
 		<artifactId>fastjson</artifactId>
 	</dependency>
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-search</artifactId>
+	</dependency>
+  	<dependency>
+ 		<groupId>org.wltea</groupId>
+  		<artifactId>IKAnalyzer</artifactId>
+ 	</dependency>
    </dependencies>
    
   <build>

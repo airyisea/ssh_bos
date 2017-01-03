@@ -1,24 +1,25 @@
 package com.airyisea.bos.service.basic;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import java.util.List;
 
 import com.airyisea.bos.domain.basic.Staff;
+import com.airyisea.bos.service.base.BaseService;
 
-public interface StaffService {
+public interface StaffService extends BaseService<Staff, String>{
 
-	void add(Staff model);
-
-	Staff checkPhone(String telephone);
+	/*void add(Staff model);
 
 	Page<Staff> queryPage(Pageable pageable);
 	
-	Page<Staff> queryPage(Specification<Staff> condition, Pageable pageable);
+	Page<Staff> queryPage(Specification<Staff> condition, Pageable pageable);*/
+
+	Staff checkPhone(String telephone);
 
 	void deleteBatch(String[] split);
 
 	void restoreBatch(String[] split);
+
+	List<Staff> findInUseList();
 
 
 }

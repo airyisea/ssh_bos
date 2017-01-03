@@ -98,7 +98,7 @@ public class StandardAction extends BaseAction<Standard> {
 	 */
 	@Action(value="standard_nameList",results={@Result(name="nameList",type="json")})
 	public String nameList() throws Exception {
-		List<Standard> list = facadeService.getStandardService().queryAll();
+		List<Standard> list = facadeService.getStandardService().findAll();
 		push(list);
 		return "nameList";
 	}

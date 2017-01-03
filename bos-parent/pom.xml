@@ -9,6 +9,7 @@
   	<module>bos-utils</module>
   	<module>bos-dao</module>
   	<module>bos-service</module>
+  	<module>bos-shiro</module>
   	<module>bos-web</module>
   </modules>
     <properties>
@@ -186,13 +187,17 @@
 			<version>1.3.7</version>
 		</dependency>
    <!-- hibernate search -->
-   <dependency>
+   		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-search</artifactId>
 			<version>${hibernate-search.version}</version>
 		</dependency>
    <!-- ik分词器 -->
-	
+   		<dependency>
+  			<groupId>org.wltea</groupId>
+	  		<artifactId>IKAnalyzer</artifactId>
+	  		<version>2012_u6</version>
+  		</dependency>
 		<!-- shiro -->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>

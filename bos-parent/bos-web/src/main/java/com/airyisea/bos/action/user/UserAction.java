@@ -1,6 +1,12 @@
 package com.airyisea.bos.action.user;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -81,18 +87,38 @@ public class UserAction extends BaseAction<User> {
 			//验证码是否正确
 			if(ajax_code.equalsIgnoreCase(session_code)) {
 				//校验登录
-				User existUser = facadeService.getUserService().login(model.getUsername(), model.getPassword());
+				/*User existUser = facadeService.getUserService().login(model.getUsername(), model.getPassword());
 				if(existUser != null) {
 					setSessionAttribute("loginUser", existUser);
 					return "login_success";
 				}else {
 					this.addActionError(this.getText("user.login.usernameAndPassword.error"));
 					return "login_fail";
+				}*/
+				//使用shiro进行权限认证
+				try {
+					Subject subject = SecurityUtils.getSubject();
+					subject.login(new UsernamePasswordToken(model.getUsername(),model.getPassword()));
+					return "login_success";
+				} catch (IncorrectCredentialsException e) {
+					e.printStackTrace();
+					this.addActionError(this.getText("user.login.password.error"));
+					return "login_fail";
+				} catch (UnknownAccountException e) {
+					e.printStackTrace();
+					this.addActionError(this.getText("user.login.username.error"));
+					return "login_fail";
 				}
 			}
 		}
 		this.addFieldError("checkcodeError", this.getText("user.login.checkcode.error"));
 		return "login_fail";
+	}
+	@Action(value="user_logout",results={@Result(name="logout",type="redirect",location="/login.jsp")})
+	public String logout() throws Exception {
+		Subject subject = SecurityUtils.getSubject();
+		subject.logout();
+		return "logout";
 	}
 	
 }
