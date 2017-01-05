@@ -1,7 +1,15 @@
 package com.airyisea.bos.action.basic;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.convention.annotation.Action;
@@ -26,7 +34,7 @@ public class StaffAction extends BaseAction<Staff> {
 	//======================ajax===========================================
 	
 	/**
-	 * 校验收派标准是否存在
+	 * 校验手机是否存在
 	 * @return
 	 * @throws Exception
 	 */
@@ -48,10 +56,14 @@ public class StaffAction extends BaseAction<Staff> {
 	 */
 	@Action(value="staff_queryPage")
 	public String queryPage() {
-		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("name", model.getName());
+		param.put("telephone", model.getTelephone());
+		param.put("station", model.getStation());
+		param.put("standard", model.getStandard());
 		Specification<Staff> c1 = getEqCondition("telephone","standard");
 		Specification<Staff> c2 = getLikeCondition("name","station");
-		Page<Staff> pageResponse = facadeService.getStaffService().queryPage(getAndCondition(c1,c2),getPageRequest());
+		Page<Staff> pageResponse = facadeService.getStaffService().queryPage(getAndCondition(c1,c2),getPageRequest(),param);
 		setPageResponse(pageResponse);
 		return "queryPage";
 	}
@@ -138,7 +150,6 @@ public class StaffAction extends BaseAction<Staff> {
 	 */
 	/*private Specification<Staff> getCondition() {
 		Specification<Staff> condition = new Specification<Staff>() {
-			
 			@Override
 			public Predicate toPredicate(Root<Staff> root, CriteriaQuery<?> query,
 					CriteriaBuilder cb) {
@@ -166,6 +177,7 @@ public class StaffAction extends BaseAction<Staff> {
 				Predicate[] predicates = new Predicate[plist.size()];
 				return cb.and(plist.toArray(predicates));
 			}
+			
 		};
 		return condition;
 	}*/

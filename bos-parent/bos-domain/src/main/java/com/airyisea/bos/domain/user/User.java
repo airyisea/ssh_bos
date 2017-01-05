@@ -146,7 +146,7 @@ public class User  implements java.io.Serializable {
     public void setRemark(String remark) {
         this.remark = remark;
     }
-@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+@ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name="user_role", catalog="bos", joinColumns = { 
         @JoinColumn(name="user_id", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="role_id", nullable=false, updatable=false) })

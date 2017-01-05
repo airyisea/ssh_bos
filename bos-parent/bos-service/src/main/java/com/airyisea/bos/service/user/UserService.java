@@ -21,4 +21,9 @@ public interface UserService extends BaseService<User, Integer>{
 	void changePassword(String newPwd, Integer id);
 
 	User findByUsername(String username);
+
+	User findByPhone(String telephone);
+
+	void add(User model, String[] rids);
+
 }

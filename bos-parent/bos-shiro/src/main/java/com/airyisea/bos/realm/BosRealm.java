@@ -28,6 +28,7 @@ public class BosRealm extends AuthorizingRealm{
 
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+		System.out.println("======授权=========");
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 		Subject subject = SecurityUtils.getSubject();
 		User user = (User) subject.getPrincipal();

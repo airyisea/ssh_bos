@@ -2,12 +2,14 @@ package com.airyisea.bos.service.auth.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.airyisea.bos.dao.auth.FunctionDao;
 import com.airyisea.bos.dao.auth.RoleDao;
+import com.airyisea.bos.domain.auth.Function;
 import com.airyisea.bos.domain.auth.Role;
 import com.airyisea.bos.service.auth.RoleService;
 import com.airyisea.bos.service.base.impl.BaseServiceImpl;
@@ -21,10 +23,32 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, String> implements Ro
 		super.setSdao(roleDao);
 		this.roleDao = roleDao;
 	}
+	@Autowired
+	private FunctionDao functionDao;
 	
 	@Override
 	public List<Role> findByUserId(Integer uid) {
 		return roleDao.findByUserId(uid);
+	}
+
+	@Override
+	public Role findByCode(String code) {
+		return roleDao.findByCode(code);
+	}
+
+	@Override
+	public void add(Role model, String fids) {
+		roleDao.save(model);
+		if(StringUtils.isNotBlank(fids)) {
+			String[] fidsArr = fids.split(",");
+			for (String fid : fidsArr) {
+				//Function function = functionDao.findOne(fid);
+				Function function = new Function();
+				function.setId(fid);
+				model.getFunctions().add(function);
+			}
+		}
+		
 	}
 
 }

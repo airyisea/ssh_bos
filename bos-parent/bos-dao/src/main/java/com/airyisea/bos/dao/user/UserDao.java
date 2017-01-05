@@ -1,13 +1,14 @@
 package com.airyisea.bos.dao.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.airyisea.bos.domain.user.User;
 @Repository("userDao")
-public interface UserDao extends JpaRepository<User, Integer> {
+public interface UserDao extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User>{
 	User findByUsernameAndPassword(String name,String password);
 	
 	@Modifying
@@ -15,4 +16,6 @@ public interface UserDao extends JpaRepository<User, Integer> {
 	void updatePassword(String newPwd, Integer id);
 
 	User findByUsername(String username);
+
+	User findByTelephone(String telephone);
 }

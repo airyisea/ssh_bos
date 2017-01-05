@@ -9,4 +9,8 @@ public interface RoleService extends BaseService<Role, String>{
 
 	List<Role> findByUserId(Integer id);
 
+	Role findByCode(String code);
+
+	void add(Role model, String fids);
+
 }

@@ -39,6 +39,9 @@ public abstract class BaseAction<T> extends ActionSupport implements ModelDriven
 	public BaseAction() {
 		try {
 			Type type = this.getClass().getGenericSuperclass();
+			if(!(type instanceof ParameterizedType)) {
+				type = this.getClass().getSuperclass().getGenericSuperclass();
+			}
 			ParameterizedType pt = (ParameterizedType) type;
 			Class c = (Class) pt.getActualTypeArguments()[0];
 			model = (T) c.newInstance();

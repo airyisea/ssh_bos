@@ -12,6 +12,8 @@
 	<constant name="struts.custom.i18n.resources" value="messages" />
 	<!-- 动态方法调用 -->
 	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<!-- 启用autowire -->
+	<constant name="struts.objectFactory.spring.autoWire.alwaysRespect" value="true" />
 
 	<package name="bos" extends="json-default">
 		<result-types>

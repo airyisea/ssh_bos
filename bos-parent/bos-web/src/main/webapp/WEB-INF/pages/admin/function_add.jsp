@@ -30,19 +30,47 @@
 	$(function(){
 		// 点击保存
 		$('#save').click(function(){
+			if($('#functionForm').form('validate')) {
+				$("#functionForm").submit();
+			}
+		});
+		$('#cancel').click(function(){
 			location.href='${pageContext.request.contextPath}/page_admin_function.action';
 		});
 	});
+	
+	$.extend($.fn.validatebox.defaults.rules, { 
+		uniqueId: {
+			validator: function(value, param){ 
+			var flag;
+			$.ajax({
+				url:"${pageContext.request.contextPath}/auth/function_checkId",
+				type : "POST",
+				timeout : 6000,
+				data : {id:value},
+				async : false,
+				success : function(data, textStatus, jqXHR){
+					flag = data;
+				}
+			});
+			return flag;
+			}, 
+			message: '编号已存在'
+		}
+		
+	});
+	
 </script>	
 </head>
 <body class="easyui-layout">
 <div data-options="region:'north'">
 	<div class="datagrid-toolbar">
 		<a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
+		<a id="cancel" icon="icon-cancel" href="#" class="easyui-linkbutton" plain="true" >取消</a>
 	</div>
 </div>
 <div data-options="region:'center'">
-	<form id="functionForm" method="post">
+	<form id="functionForm" method="post" action="${pageContext.request.contextPath}/auth/function_add">
 				<table class="table-edit" width="80%" align="center">
 					<tr class="title">
 						<td colspan="2">功能权限信息</td>
@@ -50,7 +78,13 @@
 					<tr>
 						<td width="200">编号</td>
 						<td>
-							<input type="text" name="id" class="easyui-validatebox" data-options="required:true" />						
+							<input type="text" name="id" class="easyui-validatebox" data-options="required:true,validType:'uniqueId'" />						
+						</td>
+					</tr>
+					<tr>
+						<td width="200">关键字</td>
+						<td>
+							<input type="text" name="code" class="easyui-validatebox" data-options="required:true" />						
 						</td>
 					</tr>
 					<tr>
@@ -64,7 +98,7 @@
 					<tr>
 						<td>是否生成菜单</td>
 						<td>
-							<select name="generateMenu" class="easyui-combobox">
+							<select name="generatemenu" class="easyui-combobox">
 								<option value="0">不生成</option>
 								<option value="1">生成</option>
 							</select>
@@ -79,7 +113,8 @@
 					<tr>
 						<td>父功能点</td>
 						<td>
-							<input name="parentFunction.id" class="easyui-combobox" data-options="valueField:'id',textField:'info',url:''"/>
+							<input name="function.id" class="easyui-combobox" 
+							data-options="valueField:'id',textField:'name',url:'${pageContext.request.contextPath}/auth/function_findParentList'"/>
 						</td>
 					</tr>
 					<tr>

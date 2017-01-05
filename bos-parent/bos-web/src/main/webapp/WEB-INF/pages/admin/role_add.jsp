@@ -51,7 +51,7 @@
 		};
 		
 		$.ajax({
-			url : '${pageContext.request.contextPath}/json/menu.json',
+			url : '${pageContext.request.contextPath}/auth/function_findListAjax',
 			type : 'POST',
 			dataType : 'text',
 			success : function(data) {
@@ -67,27 +67,64 @@
 		
 		// 点击保存
 		$('#save').click(function(){
-			location.href='${pageContext.request.contextPath}/page_admin_privilege.action';
+			if($("#roleForm").form('validate')) {
+				var treeObj = $.fn.zTree.getZTreeObj("functionTree");
+				var nodes = treeObj.getCheckedNodes(true);
+				if(nodes != null && nodes.length != 0) {
+					var arr = new Array();
+					for(var i = 0; i < nodes.length; i++) {
+						arr.push(nodes[i].id);
+					}
+					$("#fids").val(arr.join(","));
+				}
+				$("#roleForm").submit();
+			}
+		});
+		$('#cancel').click(function(){
+			location.href='${pageContext.request.contextPath}/page_admin_role.action';
 		});
 	});
+	
+	$.extend($.fn.validatebox.defaults.rules, { 
+		uniqueCode: {
+			validator: function(value, param){ 
+			var flag;
+			$.ajax({
+				url:"${pageContext.request.contextPath}/auth/role_checkCode",
+				type : "POST",
+				timeout : 6000,
+				data : {id:value},
+				async : false,
+				success : function(data, textStatus, jqXHR){
+					flag = data;
+				}
+			});
+			return flag;
+			}, 
+			message: '关键字已存在'
+		}
+		
+	});
+	
 </script>	
 </head>
 <body class="easyui-layout">
 		<div region="north" style="height:31px;overflow:hidden;" split="false" border="false" >
 			<div class="datagrid-toolbar">
 				<a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
+				<a id="cancel" icon="icon-cancel" href="#" class="easyui-linkbutton" plain="true" >取消</a>
 			</div>
 		</div>
 		<div region="center" style="overflow:auto;padding:5px;" border="false">
-			<form id="roleForm" method="post">
+			<form id="roleForm" method="post" action="${pageContext.request.contextPath}/auth/role_add">
 				<table class="table-edit" width="80%" align="center">
 					<tr class="title">
 						<td colspan="2">角色信息</td>
 					</tr>
 					<tr>
-						<td width="200">编号</td>
+						<td width="200">关键字</td>
 						<td>
-							<input type="text" name="id" class="easyui-validatebox" data-options="required:true" />						
+							<input type="text" name="code" class="easyui-validatebox" data-options="required:true,validType:'uniqueCode'" />						
 						</td>
 					</tr>
 					<tr>
@@ -104,6 +141,7 @@
 						<td>授权</td>
 						<td>
 							<ul id="functionTree" class="ztree"></ul>
+							<input type="hidden" name="fids" id="fids"/>
 						</td>
 					</tr>
 					</table>

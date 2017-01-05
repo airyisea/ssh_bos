@@ -38,6 +38,7 @@
 					// 弹出窗口
 					var select = $("#grid").datagrid('getSelected');
 					if(select != null) {
+						$("#noticebillId").val(select.id);
 						$("#noticebillIdView").html(select.id);
 						$("#diaoduWindow").window('open');
 					}
@@ -82,11 +83,20 @@
 
 		// 点击保存按钮，为通知单 进行分单 --- 生成工单
 		$("#save").click(function() {
-
+			$.post("${pageContext.request.contextPath}/qp/noticebill_createWorkBill",
+					{'id':$("#noticebillId").val(),'staff.id':$("#staffId").combobox('getValue')},
+					function(data){
+						if(data) {
+							$("#grid").datagrid('reload');
+							$("#diaoduWindow").window('close');
+						}
+					});
+			
 		});
 	});
 	windowClose = function() {
 		$("#staffId").combobox('reset');
+		$("#noticebillId").val("");
 	}
 </script>
 </head>

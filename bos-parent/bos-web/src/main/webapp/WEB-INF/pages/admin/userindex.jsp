@@ -42,12 +42,27 @@
 		// 注册ajax查询
 		$('#ajax').click(function() {
 			var elWin = $("#list").get(0).contentWindow;
-			elWin.$('#grid').datagrid( {
-				pagination : true,
-				url : "${pageContext.request.contextPath}/json/users.json"
-			});
+			elWin.$('#grid').datagrid('load',$("#form").serializeJson());
 		});
 	});
+	
+	$.fn.serializeJson=function(){  
+        var serializeObj={};  
+        var array=this.serializeArray();  
+        var str=this.serialize();  
+        $(array).each(function(){  
+            if(serializeObj[this.name]){  
+                if($.isArray(serializeObj[this.name])){  
+                    serializeObj[this.name].push(this.value);  
+                }else{  
+                    serializeObj[this.name]=[serializeObj[this.name],this.value];  
+                }  
+            }else{  
+                serializeObj[this.name]=this.value;   
+            }  
+        });  
+        return serializeObj;  
+    }; 
 </script>	
 </head>
 <body class="easyui-layout" style="visibility:hidden;">
@@ -72,8 +87,8 @@
 				</td></tr>
 				<tr><td>
 					<b>生日</b><span class="operator"><a name="birthday-opt" opt="date"></a></span>
-					<input type="text" id="birthday" name="birthday" value="1977-11-11" class="easyui-datebox" /><br/>
-					<input type="text" id="_birthday2" name="_birthday2" value="1988-11-11" class="easyui-datebox" />
+					<input type="text" id="birthday" name="birthday"  class="easyui-datebox" /><br/>
+					<input type="text" id="_birthday2" name="_birthday2" class="easyui-datebox"/>
 				</td></tr>
 
 			</table>

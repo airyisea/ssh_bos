@@ -47,6 +47,18 @@ public class NoticeBillAction extends BaseAction<NoticeBill> {
 		return "findnoassociations";
 	}
 	
+	/**
+	 * 分页查询未分单通知单
+	 * @return
+	 * @throws Exception
+	 */
+	@Action(value="noticebill_createWorkBill",results={@Result(name="createWorkBill",type="json")})
+	public String createWorkBill() {
+		facadeService.getNoticeBillService().createManualWorkBill(model);
+		push(true);
+		return "createWorkBill";
+	}
+	
 	
 	@Action(value="noticebill_add",results={@Result(name="add",location="/WEB-INF/pages/qupai/noticebill_add.jsp")})
 	public String add() {

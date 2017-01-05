@@ -1,8 +1,16 @@
 package com.airyisea.bos.action.user;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -12,9 +20,12 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 
 import com.airyisea.bos.action.base.BaseAction;
+import com.airyisea.bos.domain.basic.Staff;
 import com.airyisea.bos.domain.user.User;
 import com.airyisea.bos.utils.MD5Utils;
 @SuppressWarnings("serial")
@@ -24,6 +35,13 @@ import com.airyisea.bos.utils.MD5Utils;
 @Namespace("/user")
 public class UserAction extends BaseAction<User> {
 	
+	private Date _birthday2;
+	public Date get_birthday2() {
+		return _birthday2;
+	}
+	public void set_birthday2(Date _birthday2) {
+		this._birthday2 = _birthday2;
+	}
 	//=============================ajax================================================
 	//校验验证码
 	@Action(value="user_checkcode",results={@Result(name="checkcode",type="json")})
@@ -39,6 +57,49 @@ public class UserAction extends BaseAction<User> {
 		push(checkcode_flag);
 		return "checkcode";
 	}
+	/**
+	 * 校验手机是否存在
+	 * @return
+	 * @throws Exception
+	 */
+	@Action(value="user_checkPhone",results={@Result(name="checkPhone",type="json")})
+	public String checkPhone() {
+		User existUser = facadeService.getUserService().findByPhone(model.getTelephone());
+		if(existUser != null) {
+			push(false);
+		}else {
+			push(true);
+		}
+		return "checkPhone";
+	}
+	/**
+	 * 校验用户名是否存在
+	 * @return
+	 * @throws Exception
+	 */
+	@Action(value="user_checkName",results={@Result(name="checkName",type="json")})
+	public String checkName() {
+		User existUser = facadeService.getUserService().findByUsername(model.getUsername());
+		if(existUser != null) {
+			push(false);
+		}else {
+			push(true);
+		}
+		return "checkName";
+	}
+	
+	/**
+	 * 分页查询用户
+	 * @return
+	 * @throws Exception
+	 */
+	@Action(value="user_queryPage")
+	public String queryPage() {
+		Page<User> pageResponse = facadeService.getUserService().queryPage(getCondition(), getPageRequest());
+		setPageResponse(pageResponse);
+		return "queryPage";
+	}
+	
 	
 	//修改密码
 	@Action(value="user_changePassword",results={@Result(name="changePassword",type="json")})
@@ -114,11 +175,58 @@ public class UserAction extends BaseAction<User> {
 		this.addFieldError("checkcodeError", this.getText("user.login.checkcode.error"));
 		return "login_fail";
 	}
+	
 	@Action(value="user_logout",results={@Result(name="logout",type="redirect",location="/login.jsp")})
 	public String logout() throws Exception {
 		Subject subject = SecurityUtils.getSubject();
 		subject.logout();
 		return "logout";
 	}
+	
+	/**
+	 * 添加用户
+	 * @return
+	 * @throws Exception
+	 */
+	@Action(value="user_add",results={@Result(name="add",location="/WEB-INF/pages/admin/userlist.jsp")})
+	public String add() {
+		String[] rids = getRequest().getParameterValues("rid");
+		facadeService.getUserService().add(model,rids);
+		return "add";
+	}
+	
+	private Specification<User> getCondition() {
+		Specification<User> condition = new Specification<User>() {
+			
+			@Override
+			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query,
+					CriteriaBuilder cb) {
+				List<Predicate> plist = new ArrayList<>();
+				String username = model.getUsername();
+				if(StringUtils.isNotBlank(username)) {
+					Predicate p1 = cb.like(root.get("username").as(String.class), "%" +username+ "%");
+					plist.add(p1);
+				}
+				String gender = model.getGender();
+				if(StringUtils.isNotBlank(gender)) {
+					Predicate p2 = cb.equal(root.get("gender").as(String.class), gender);
+					plist.add(p2);
+				}
+				Date birthday = model.getBirthday();
+				if(birthday != null) {
+					Predicate p3 = cb.greaterThanOrEqualTo(root.get("birthday").as(Date.class), birthday);
+					plist.add(p3);
+				}
+				if(_birthday2 != null) {
+					Predicate p4 = cb.lessThanOrEqualTo(root.get("birthday").as(Date.class), _birthday2);
+					plist.add(p4);
+				}
+				Predicate[] predicates = new Predicate[plist.size()];
+				return cb.and(plist.toArray(predicates));
+			}
+		};
+		return condition;
+	}
+	
 	
 }

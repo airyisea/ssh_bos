@@ -2,6 +2,7 @@ package com.airyisea.bos.service.base;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,8 @@ public interface BaseService<T,ID extends Serializable> {
 	Page<T> queryPage(Pageable pageRequest);
 	
 	Page<T> queryPage(Specification<T> condition,Pageable pageRequest);
+	
+	Page<T> queryPage(Specification<T> condition,Pageable pageRequest,Object param);
 	
 	
 }

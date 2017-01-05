@@ -87,13 +87,15 @@
 	
 	$(function() {
 		//加载基本功能菜单
-		$.post("${pageContext.request.contextPath}/json/menu.json",function(data){
+		$.post("${pageContext.request.contextPath}/auth/function_findByUser",function(data){
 			$.fn.zTree.init($("#basicmenu"), setting, data);
 		});
 		//加载系统管理菜单
+		<shiro:hasRole name="admin">
 		$.post("${pageContext.request.contextPath}/json/admin.json",function(data){
 			$.fn.zTree.init($("#sysmenu"), setting, data);
 		},"json");
+		</shiro:hasRole>
 		//页面加载,右下角弹出消息框
 		window.setTimeout(function(){
 			$.messager.show({  	
@@ -201,10 +203,11 @@
 			<div title="基本功能" style="overflow: auto" data-options="iconCls:'icon-mini-add',selected:true">
 				<ul id="basicmenu" class="ztree"></ul>
 			</div>
-
+			<shiro:hasRole name="admin">
 			<div title="系统管理" style="overflow: auto" data-options="iconCls:'icon-mini-add'">
 				<ul id="sysmenu" class="ztree"></ul>
 			</div>
+			</shiro:hasRole>
 		</div>
 	</div>
 

@@ -2,8 +2,10 @@ package com.airyisea.bos.domain.basic;
 
 import com.airyisea.bos.domain.qp.NoticeBill;
 import com.airyisea.bos.domain.qp.WorkBill;
+
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.apache.struts2.json.annotations.JSON;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -119,6 +123,7 @@ public class Staff  implements java.io.Serializable {
     public void setDecidedZones(Set<DecidedZone> decidedZones) {
         this.decidedZones = decidedZones;
     }
+    @JSON(serialize=false)
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="staff")
     public Set<WorkBill> getWorkBills() {
         return this.workBills;
@@ -127,6 +132,7 @@ public class Staff  implements java.io.Serializable {
     public void setWorkBills(Set<WorkBill> workBills) {
         this.workBills = workBills;
     }
+    @JSON(serialize=false)
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="staff")
     public Set<NoticeBill> getNoticeBills() {
         return this.noticeBills;

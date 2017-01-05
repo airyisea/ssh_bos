@@ -12,9 +12,15 @@
   	<!-- 权限认证 -->
   	<table name="auth_function" catalog="bos"
 		class="com.airyisea.bos.domain.auth.Function">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
 	</table>
   	<table name="auth_role" catalog="bos"
 		class="com.airyisea.bos.domain.auth.Role">
+		<primary-key>
+			<generator class="uuid"></generator>
+		</primary-key>
 	</table>
   
   	<!-- 取派业务 -->

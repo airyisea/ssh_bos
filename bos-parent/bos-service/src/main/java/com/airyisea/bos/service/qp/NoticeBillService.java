@@ -14,4 +14,6 @@ public interface NoticeBillService extends BaseService<NoticeBill, String>{
 
 	List<NoticeBill> findNoAssociations();
 
+	void createManualWorkBill(NoticeBill model);
+
 }

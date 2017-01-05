@@ -213,6 +213,15 @@ public class NoticeBillServiceImpl extends BaseServiceImpl<NoticeBill, String>im
 		return workBill;
 	}
 
+	@Override
+	public void createManualWorkBill(NoticeBill model) {
+		NoticeBill existNoticeBill = noticeBillDao.findOne(model.getId());
+		existNoticeBill.setStaff(model.getStaff());
+		WorkBill workBill = createWorkBill(existNoticeBill);
+		workBillDao.save(workBill);
+		
+	}
+
 	
 
 }

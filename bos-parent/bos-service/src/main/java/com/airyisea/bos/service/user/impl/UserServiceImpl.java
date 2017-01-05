@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.airyisea.bos.dao.user.UserDao;
+import com.airyisea.bos.domain.auth.Role;
 import com.airyisea.bos.domain.user.User;
 import com.airyisea.bos.service.base.impl.BaseServiceImpl;
 import com.airyisea.bos.service.user.UserService;
@@ -17,6 +18,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements U
 	@Autowired
 	public void setSuperDao(UserDao userDao){
 		super.setDao(userDao);
+		super.setSdao(userDao);
 		this.userDao = userDao;
 	}
 	
@@ -62,6 +64,25 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements U
 	public User findByUsername(String username) {
 		return userDao.findByUsername(username);
 	}
+
+	@Override
+	public User findByPhone(String telephone) {
+		return userDao.findByTelephone(telephone);
+	}
+
+	@Override
+	public void add(User model, String[] rids) {
+		model.setPassword(MD5Utils.getPwd(model.getPassword()));
+		userDao.saveAndFlush(model);
+		if(rids!= null && rids.length != 0) {
+			for (String rid : rids) {
+				Role role = new Role(rid);
+				model.getRoles().add(role);
+			}
+		}
+		
+	}
+
 	
 
 }

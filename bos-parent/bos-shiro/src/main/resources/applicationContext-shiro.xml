@@ -48,8 +48,26 @@
 				<property name="hashAlgorithmName" value="md5"></property>
 			</bean>
 		</property>
+		<property name="authorizationCacheName" value="shiro"></property>
 	</bean>
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="bosRealm"></property>
+		<property name="cacheManager" ref="shiroCacheManager"></property>
 	</bean>
+	<!--开启注解的权限控制  -->
+	<!-- spring bean 对象后处理器  -->
+	<bean id="lifecycleBeanPostProcessor"
+		class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+	<!-- 切面自动代理 -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true"></property>
+	</bean>
+	<!-- 切面 -->
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		 <property name="securityManager" ref="securityManager"/>
+	</bean>
+	<bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+         <property name="cacheManager" ref="ehcacheManager"></property>
+    </bean>
 </beans>

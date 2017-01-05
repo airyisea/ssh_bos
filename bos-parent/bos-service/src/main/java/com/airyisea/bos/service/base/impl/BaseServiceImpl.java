@@ -2,7 +2,9 @@ package com.airyisea.bos.service.base.impl;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -74,6 +76,13 @@ public class BaseServiceImpl<T,ID extends Serializable> implements BaseService<T
 
 	@Override
 	public Page<T> queryPage(Specification<T> condition, Pageable pageRequest) {
+		return sdao.findAll(condition, pageRequest);
+	}
+	
+	@Cacheable(key="#pageRequest.pageNumber+'_'+#pageRequest.pageSize+'_'+#param",value="data")
+	@Override
+	public Page<T> queryPage(Specification<T> condition, Pageable pageRequest,
+			Object param) {
 		return sdao.findAll(condition, pageRequest);
 	}
 

@@ -29,6 +29,13 @@
 <script type="text/javascript">
 	$(function(){
 		$("#grid").datagrid({
+			fit : true,
+			border : false,
+			rownumbers : true,
+			striped : true,
+			pageList: [5,10,15],
+			pageSize : 5,
+			pagination : true,
 			toolbar : [
 				{
 					id : 'add',
@@ -39,7 +46,7 @@
 					}
 				}           
 			],
-			url : '',
+			url : '${pageContext.request.contextPath}/auth/function_queryPage',
 			columns : [[
 			  {
 				  field : 'id',
