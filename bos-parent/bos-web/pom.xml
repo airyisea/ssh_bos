@@ -58,6 +58,50 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 		</dependency>
+		<dependency>
+        	<groupId>com.lowagie</groupId>
+        	<artifactId>itext</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>com.itextpdf</groupId>
+        	<artifactId>itext-asian</artifactId>
+        </dependency>
+        <dependency>
+        <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy-all</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>net.sf.jasperreports</groupId>
+        <artifactId>jasperreports</artifactId>
+        <exclusions>
+          <exclusion>
+            <artifactId>itext</artifactId>
+            <groupId>com.lowagie</groupId>
+          </exclusion>
+          <exclusion>
+          	<artifactId>commons-collections</artifactId>
+          	<groupId>commons-collections</groupId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+			    <groupId>jfree</groupId>
+			    <artifactId>jfreechart</artifactId>
+			    <version>1.0.9</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/jfree/jcommon -->
+			<dependency>
+			    <groupId>jfree</groupId>
+			    <artifactId>jcommon</artifactId>
+			    <version>1.0.9</version>
+			</dependency>
+			  <!-- 插件包 -->
+			<!-- https://mvnrepository.com/artifact/org.apache.struts/struts2-jfreechart-plugin -->
+			<dependency>
+			    <groupId>org.apache.struts</groupId>
+			    <artifactId>struts2-jfreechart-plugin</artifactId>
+			    <version>${struts2.version}</version>
+           </dependency>
   </dependencies>
   <build>
      <plugins>

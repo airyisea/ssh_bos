@@ -29,7 +29,7 @@ public class FunctionAction extends BaseAction<Function> {
 	 * @return
 	 * @throws Exception
 	 */
-	@Action(value="function_findParentList",results={@Result(name="findParentList",type="json")})
+	@Action(value="function_findParentList",results={@Result(name="findParentList",type="fastJson",params={"includeParam","id,name"})})
 	public String findParentList() {
 		List<Function> list = facadeService.getFunctionService().findParentList();
 		push(list);
@@ -40,7 +40,7 @@ public class FunctionAction extends BaseAction<Function> {
 	 * @return
 	 * @throws Exception
 	 */
-	@Action(value="function_findListAjax",results={@Result(name="findListAjax",type="json")})
+	@Action(value="function_findListAjax",results={@Result(name="findListAjax",type="fastJson",params={"includeParam","id,pId,name"})})
 	public String findListAjax() {
 		List<Function> list = facadeService.getFunctionService().findAll();
 		push(list);
@@ -51,7 +51,7 @@ public class FunctionAction extends BaseAction<Function> {
 	 * @return
 	 * @throws Exception
 	 */
-	@Action(value="function_findByUser",results={@Result(name="findByUser",type="json")})
+	@Action(value="function_findByUser",results={@Result(name="findByUser",type="fastJson",params={"includeParam","id,pId,name,page"})})
 	public String findByUser() {
 		Subject subject = SecurityUtils.getSubject();
 		User loginUser = (User) subject.getPrincipal();
@@ -80,7 +80,8 @@ public class FunctionAction extends BaseAction<Function> {
 	 * @return
 	 * @throws Exception
 	 */
-	@Action(value="function_queryPage")
+	@Action(value="function_queryPage",results={
+			@Result(name="queryPage",type="fastJson",params={"root","pageData","excludeParam","function,roles,functions"})})
 	public String queryPage() {
 		setPage(Integer.parseInt(getParameter("page")));
 		Page<Function> pageResponse = facadeService.getFunctionService().queryPage(getPageRequest());

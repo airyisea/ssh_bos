@@ -40,7 +40,7 @@ public class NoticeBillAction extends BaseAction<NoticeBill> {
 	 * @return
 	 * @throws Exception
 	 */
-	@Action(value="noticebill_findnoassociations",results={@Result(name="findnoassociations",type="json")})
+	@Action(value="noticebill_findnoassociations",results={@Result(name="findnoassociations",type="fastJson",params={"includeParam","id,delegater,telephone,pickaddress,product,pickdate"})})
 	public String findNoAssociations() {
 		List<NoticeBill> list = facadeService.getNoticeBillService().findNoAssociations();
 		push(list);

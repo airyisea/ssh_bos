@@ -1,9 +1,11 @@
 package com.airyisea.bos.service.user.impl;
 
+import org.activiti.engine.IdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.airyisea.bos.dao.auth.RoleDao;
 import com.airyisea.bos.dao.user.UserDao;
 import com.airyisea.bos.domain.auth.Role;
 import com.airyisea.bos.domain.user.User;
@@ -13,8 +15,12 @@ import com.airyisea.bos.utils.MD5Utils;
 @Service("userService")
 @Transactional
 public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements UserService{
-	private UserDao userDao;
+	@Autowired
+	private IdentityService identityService;
+	@Autowired
+	private RoleDao roleDao;
 	
+	private UserDao userDao;
 	@Autowired
 	public void setSuperDao(UserDao userDao){
 		super.setDao(userDao);
@@ -74,10 +80,14 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements U
 	public void add(User model, String[] rids) {
 		model.setPassword(MD5Utils.getPwd(model.getPassword()));
 		userDao.saveAndFlush(model);
+		org.activiti.engine.identity.User user = new org.activiti.engine.impl.persistence.entity.UserEntity();
+		user.setId(model.getId() + "");
+		identityService.saveUser(user);
 		if(rids!= null && rids.length != 0) {
 			for (String rid : rids) {
-				Role role = new Role(rid);
+				Role role = roleDao.findOne(rid);
 				model.getRoles().add(role);
+				identityService.createMembership(model.getId() + "", role.getCode());
 			}
 		}
 		

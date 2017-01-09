@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -112,7 +114,9 @@ public class StandardAction extends BaseAction<Standard> {
 	 */
 	@Action(value="standard_add",results={@Result(name="add",location="/WEB-INF/pages/base/standard.jsp")})
 	public String add() throws Exception {
-		User loginUser = (User) getSessionAttribute("loginUser");
+		//User loginUser = (User) getSessionAttribute("loginUser");
+		Subject subject = SecurityUtils.getSubject();
+		User loginUser = (User) subject.getPrincipal();
 		//封装其他参数
 		model.setOperator(loginUser.getUsername());
 		model.setOperatorStation(loginUser.getStation());

@@ -46,6 +46,12 @@
 	function doSave(){
 		$("#grid").datagrid('endEdit',editIndex );
 	}
+	function doExportPDF(){
+		location.href = "${pageContext.request.contextPath}/qp/workordermanage_exportPDF";
+	}
+	function doExportPDF2(){
+		location.href = "${pageContext.request.contextPath}/qp/workordermanage_exportPDF2";
+	}
 	
 	function doCancel(){
 		if(editIndex!=undefined){
@@ -73,6 +79,16 @@
 		text : '保存',
 		iconCls : 'icon-save',
 		handler : doSave
+	}, {
+		id : 'button-export',
+		text : '导出PDF',
+		iconCls : 'icon-redo',
+		handler : doExportPDF
+	}, {
+		id : 'button-export',
+		text : '导出PDF2',
+		iconCls : 'icon-redo',
+		handler : doExportPDF2
 	}];
 	// 定义列
 	var columns = [ [ {

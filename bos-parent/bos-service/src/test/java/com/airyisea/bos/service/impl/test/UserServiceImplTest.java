@@ -1,5 +1,6 @@
 package com.airyisea.bos.service.impl.test;
 
+import org.activiti.engine.RepositoryService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.airyisea.bos.dao.user.DemoDao;
 import com.airyisea.bos.domain.user.User;
+import com.airyisea.bos.service.facade.FacadeService;
 import com.airyisea.bos.service.user.UserService;
 import com.airyisea.bos.utils.MD5Utils;
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -21,6 +23,9 @@ public class UserServiceImplTest {
 	private UserService userService;
 	@Autowired
 	private DemoDao demoDao;
+	@Autowired
+	private RepositoryService repositoryService;
+	
 	
 	@Test
 	public void testSave() {
@@ -55,6 +60,10 @@ public class UserServiceImplTest {
 	public void testLogin4() {
 		User user = demoDao.login4("张三", MD5Utils.getPwd("123"));
 		System.out.println(user);
+	}
+	@Test
+	public void delete() {
+		repositoryService.deleteDeployment("1");
 	}
 	
 	

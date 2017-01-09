@@ -1,12 +1,15 @@
 package com.airyisea.bos.service.facade;
 
+import org.activiti.engine.HistoryService;
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.airyisea.bos.domain.user.User;
 import com.airyisea.bos.service.auth.FunctionService;
 import com.airyisea.bos.service.auth.RoleService;
-import com.airyisea.bos.service.base.BaseService;
 import com.airyisea.bos.service.basic.DecidedZoneService;
 import com.airyisea.bos.service.basic.RegionService;
 import com.airyisea.bos.service.basic.StaffService;
@@ -40,6 +43,16 @@ public class FacadeService {
 	private RoleService roleService;
 	@Autowired
 	private FunctionService functionService;
+	@Autowired
+	private RepositoryService repositoryService;
+	@Autowired
+	private RuntimeService runtimeService;
+	@Autowired
+	private TaskService taskService;
+	@Autowired
+	private IdentityService identityService;
+	@Autowired
+	private HistoryService historyService;
 	
 	public StandardService getStandardService() {
 		return standardService;
@@ -84,7 +97,25 @@ public class FacadeService {
 	public FunctionService getFunctionService() {
 		return functionService;
 	}
-	
-	
+
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
+	}
+
+	public RuntimeService getRuntimeService() {
+		return runtimeService;
+	}
+
+	public TaskService getTaskService() {
+		return taskService;
+	}
+
+	public IdentityService getIdentityService() {
+		return identityService;
+	}
+
+	public HistoryService getHistoryService() {
+		return historyService;
+	}
 	
 }

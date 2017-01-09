@@ -83,6 +83,7 @@ public class BaseServiceImpl<T,ID extends Serializable> implements BaseService<T
 	@Override
 	public Page<T> queryPage(Specification<T> condition, Pageable pageRequest,
 			Object param) {
+		System.out.println();
 		return sdao.findAll(condition, pageRequest);
 	}
 

@@ -3,7 +3,9 @@ package com.airyisea.bos.action.basic;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -78,10 +80,15 @@ public class RegionAction extends BaseAction<Region> {
 	 */
 	@Action(value="region_queryPage")
 	public String queryPage() {
-		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("id", model.getId());
+		param.put("province", model.getProvince());
+		param.put("city", model.getCity());
+		param.put("district", model.getDistrict());
+		param.put("shortcode", model.getShortcode());
 		Specification<Region> c1 = getLikeCondition("province","city","district","shortcode");
 		Specification<Region> c2 = getEqCondition("id");
-		Page<Region> pageResponse = facadeService.getRegionService().queryPage(getAndCondition(c1,c2),getPageRequest());
+		Page<Region> pageResponse = facadeService.getRegionService().queryPage(getAndCondition(c1,c2),getPageRequest(),param);
 		setPageResponse(pageResponse);
 		return "queryPage";
 	}

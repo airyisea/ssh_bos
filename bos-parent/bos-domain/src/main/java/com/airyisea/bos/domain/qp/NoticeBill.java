@@ -3,9 +3,12 @@ package com.airyisea.bos.domain.qp;
 
 import com.airyisea.bos.domain.basic.Staff;
 import com.airyisea.bos.domain.user.User;
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -169,6 +173,7 @@ public class NoticeBill  implements java.io.Serializable {
     }
     @Temporal(TemporalType.DATE)
     @Column(name="PICKDATE", length=0)
+    @JSONField(format="yyyy-MM-dd")
     public Date getPickdate() {
         return this.pickdate;
     }

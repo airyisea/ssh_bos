@@ -26,4 +26,31 @@
          <property name="cacheManager"  ref="ehcacheManager"></property>
     </bean>
     <cache:annotation-driven cache-manager="springCacheManager"/>
+    <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+    	<!-- 注入数据源 -->
+    	<property name="dataSource" ref="dataSource"></property>
+    	<!-- 自动建表 -->
+    	<property name="databaseSchemaUpdate" value="true"/>
+		<!-- 字体 -->
+		<property name="activityFontName" value="宋体"/>
+        <property name="labelFontName" value="宋体"/>
+    	<!-- 注入事务管理器 -->
+    	<property name="transactionManager" ref="transactionManager"></property>
+    </bean>
+    <!-- 流程引擎对象：spring整合方式 -->
+    <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
+    </bean>
+    <!-- 流程控制的相关service -->
+	<!-- 仓库对象 -->
+	<bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService"/>
+	<!-- 运行时Service -->
+	<bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService"/>
+	<!-- 任务Service -->
+	<bean id="taskService" factory-bean="processEngine" factory-method="getTaskService"/>
+	<!-- 用户认证Service -->
+	<bean id="identityService" factory-bean="processEngine" factory-method="getIdentityService"/>
+	<!-- 历史Service -->
+	<bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService"/>
+    
 </beans>

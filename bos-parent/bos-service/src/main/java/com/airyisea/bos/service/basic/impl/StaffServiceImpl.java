@@ -3,6 +3,7 @@ package com.airyisea.bos.service.basic.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +47,7 @@ public class StaffServiceImpl extends BaseServiceImpl<Staff, String> implements 
 	}
 
 	@Override
+	@CacheEvict(value="data",allEntries=true)
 	public void deleteBatch(String[] split) {
 		for (int i = 0; i < split.length; i++) {
 			Staff staff = new Staff();
@@ -56,6 +58,7 @@ public class StaffServiceImpl extends BaseServiceImpl<Staff, String> implements 
 	}
 
 	@Override
+	@CacheEvict(value="data",allEntries=true)
 	public void restoreBatch(String[] split) {
 		for (int i = 0; i < split.length; i++) {
 			staffDao.restore(split[i]);

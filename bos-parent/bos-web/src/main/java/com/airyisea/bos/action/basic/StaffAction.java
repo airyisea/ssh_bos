@@ -57,6 +57,8 @@ public class StaffAction extends BaseAction<Staff> {
 	@Action(value="staff_queryPage")
 	public String queryPage() {
 		Map<String, Object> param = new HashMap<String, Object>();
+		
+		param.put("className",model.getClass().getSimpleName());
 		param.put("name", model.getName());
 		param.put("telephone", model.getTelephone());
 		param.put("station", model.getStation());

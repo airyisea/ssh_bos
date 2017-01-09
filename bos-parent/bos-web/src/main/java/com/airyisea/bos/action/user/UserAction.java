@@ -93,7 +93,8 @@ public class UserAction extends BaseAction<User> {
 	 * @return
 	 * @throws Exception
 	 */
-	@Action(value="user_queryPage")
+	@Action(value="user_queryPage",results={
+			@Result(name="queryPage",type="fastJson",params={"root","pageData","excludeParam","password,remark,roles,noticeBills"})})
 	public String queryPage() {
 		Page<User> pageResponse = facadeService.getUserService().queryPage(getCondition(), getPageRequest());
 		setPageResponse(pageResponse);

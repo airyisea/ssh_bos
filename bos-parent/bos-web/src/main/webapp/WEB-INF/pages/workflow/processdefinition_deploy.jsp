@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri="/struts-tags" prefix="s"%>    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>流程定义文件上传</title>
 <!-- 导入jquery核心类库 -->
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/js/jquery-1.8.3.js"></script>
@@ -28,71 +29,35 @@
 	type="text/javascript"></script>
 <script type="text/javascript">
 	$(function(){
-		$("#grid").datagrid({
-			fit : true,
-			border : false,
-			rownumbers : true,
-			striped : true,
-			pageList: [5,10,15],
-			pageSize : 5,
-			pagination : true,
-			toolbar : [
-				{
-					id : 'add',
-					text : '添加权限',
-					iconCls : 'icon-add',
-					handler : function(){
-						location.href='${pageContext.request.contextPath}/page_admin_function_add.action';
-					}
-				}           
-			],
-			url : '${pageContext.request.contextPath}/auth/function_queryPage',
-			columns : [[
-			  {
-				  field : 'id',
-				  title : '编号',
-				  width : 200
-			  },
-			  {
-				  field : 'name',
-				  title : '名称',
-				  width : 200
-			  },  
-			  {
-				  field : 'description',
-				  title : '描述',
-				  width : 200
-			  },  
-			  {
-				  field : 'generatemenu',
-				  title : '是否生成菜单',
-				  width : 200,
-				  formatter : function(data,row, index){
-						if(data=="1"){
-							return "是";
-						}else{
-							return "否";
-						}
-					}
-			  },  
-			  {
-				  field : 'zindex',
-				  title : '优先级',
-				  width : 200
-			  },  
-			  {
-				  field : 'page',
-				  title : '路径',
-				  width : 200
-			  }
-			]]
+		var reg = /^.+\.zip$/;
+		$("#btn").click(function(event){
+			if(!reg.test($("#zipFile").val())) {
+				$.messager.alert("警告","只能接收.zip格式的文件！","warning");
+				event.preventDefault();
+			}
 		});
+		
 	});
-</script>	
+
+
+</script>
 </head>
-<body class="easyui-layout">
-<div data-options="region:'center'">
-	<table id="grid"></table>
-</div>
+<body>
+<s:form action="processDefinition_deploy" theme="simple" method="post" enctype="multipart/form-data" id="uploadForm" namespace="/process">
+	<table class="table-edit" width="100%" >
+		<tr class="title"><td colspan="2">发布新流程</td></tr>
+		<tr>
+			<td width="200">浏览流程定义zip压缩文件</td>
+			<td>
+				<input type="file" name="upload" id="zipFile"/>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<a id="btn" href="javascript:$('#uploadForm').submit();" class="easyui-linkbutton" data-options="iconCls:'icon-save'">发布新流程</a>  
+			</td>
+		</tr>
+	</table>
+</s:form>
 </body>
 </html>

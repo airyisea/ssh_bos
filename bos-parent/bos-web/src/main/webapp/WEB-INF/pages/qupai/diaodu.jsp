@@ -73,10 +73,7 @@
 				field : 'pickdate',
 				title : '取件日期',
 				align : 'center',
-				width : 100,
-				formatter : function(data, row, index) {
-					return data.substring(0, data.indexOf("T"));
-				}
+				width : 100
 			} ] ],
 			url : '${pageContext.request.contextPath}/qp/noticebill_findnoassociations'
 		});

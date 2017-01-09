@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="mavenbos" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1e379993-bbb4-4900-886a-807bcbf24990">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="company" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select * from qp_workordermanage]]>
+	</queryString>
+	<field name="ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ARRIVECITY" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PRODUCT" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NUM" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="WEIGHT" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FLOADREQR" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PRODTIMELIMIT" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PRODTYPE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SENDERNAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SENDERPHONE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SENDERADDR" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RECEIVERNAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RECEIVERPHONE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RECEIVERADDR" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FEEITEMNUM" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ACTLWEIT" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="VOL" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MANAGERCHECK" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="UPDATETIME" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="75" splitType="Stretch">
+			<staticText>
+				<reportElement x="179" y="17" width="192" height="45" uuid="3aee8d55-4a21-485e-b367-99ae5c667794"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" size="24" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[工作单报表]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="45" splitType="Stretch">
+			<textField>
+				<reportElement x="443" y="12" width="72" height="20" uuid="06bf828e-48e6-4196-9ae9-83274594c7c0"/>
+				<textElement>
+					<font fontName="宋体" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{company}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="52" splitType="Stretch">
+			<staticText>
+				<reportElement x="46" y="18" width="51" height="20" uuid="7a12d48e-0496-4bc3-8442-354a5840ffb3"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" size="12" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[到达地]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="18" width="57" height="20" uuid="ccba5079-f030-4b21-ba27-1c83c5c3a602"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" size="12" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[产品名称]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="18" width="59" height="20" uuid="38cc3e31-c51e-469f-a403-41a0c2947b20"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" size="12" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[产品重量]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="18" width="87" height="20" uuid="fba7a396-4dab-472b-8213-fd4677cca267"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" size="12" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[承载量]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="48" splitType="Stretch">
+			<textField>
+				<reportElement x="46" y="14" width="51" height="20" uuid="17800972-5e71-4639-a260-156bb7f4a5cc"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ARRIVECITY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="149" y="14" width="57" height="20" uuid="892e4794-0a7c-4f48-9a38-ea3b92d259d9"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRODUCT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="252" y="14" width="59" height="20" uuid="0adaf779-c946-42be-8332-3c57daac9d5e"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{WEIGHT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="14" width="87" height="20" uuid="87f47e45-5599-4d4b-9189-d6ae042539a0"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FLOADREQR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

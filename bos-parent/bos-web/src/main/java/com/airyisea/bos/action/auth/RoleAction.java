@@ -23,7 +23,7 @@ public class RoleAction extends BaseAction<Role> {
 	 * @return
 	 * @throws Exception
 	 */
-	@Action(value="role_findListAll",results={@Result(name="findListAll",type="json")})
+	@Action(value="role_findListAll",results={@Result(name="findListAll",type="fastJson",params={"includeParam","id,name"})})
 	public String findListAll() {
 		List<Role> list = facadeService.getRoleService().findAll();
 		push(list);
@@ -51,7 +51,8 @@ public class RoleAction extends BaseAction<Role> {
 	 * @return
 	 * @throws Exception
 	 */
-	@Action(value="role_queryPage")
+	@Action(value="role_queryPage",results={
+			@Result(name="queryPage",type="fastJson",params={"root","pageData","excludeParam","code,users,functions"})})
 	public String queryPage() {
 		Page<Role> pageResponse = facadeService.getRoleService().queryPage(getPageRequest());
 		setPageResponse(pageResponse);
@@ -61,7 +62,7 @@ public class RoleAction extends BaseAction<Role> {
 	
 	
 	/**
-	 * 添加权限
+	 * 添加角色
 	 * @return
 	 * @throws Exception
 	 */

@@ -12,10 +12,10 @@
 	<constant name="struts.custom.i18n.resources" value="messages" />
 	<!-- 动态方法调用 -->
 	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
-	<!-- 启用autowire -->
+	<!-- 启用自动装配 -->
 	<constant name="struts.objectFactory.spring.autoWire.alwaysRespect" value="true" />
 
-	<package name="bos" extends="json-default">
+	<package name="bos" extends="json-default,jfreechart-default">
 		<result-types>
 			<result-type name="fastJson" class="fastJson"></result-type>
 		</result-types>
@@ -35,7 +35,12 @@
 			<result name="queryPage" type="json">
 				<param name="root">pageData</param>
 			</result>
+			<result name="unauthorizedUrl">/unauthorizedUrl.jsp</result>
 		</global-results>
+		<!-- 全局异常捕获 -->
+		<global-exception-mappings>
+			 <exception-mapping result="unauthorizedUrl" exception="org.apache.shiro.authz.AuthorizationException"/>
+		</global-exception-mappings>
 		<action name="index">
 			<result>/index.jsp</result>
 		</action>

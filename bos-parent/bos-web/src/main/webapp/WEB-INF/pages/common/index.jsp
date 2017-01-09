@@ -27,14 +27,22 @@
 		if(treeNode.page) {//判断是否是一个可选页面
 			//判断该tar是否已经存在
 			if($('#tars').tabs('exists',treeNode.name)){
-				$('#tars').tabs('select',treeNode.name)
+				$('#tars').tabs('select',treeNode.name);
+				
 			}else {
 				var content = "<iframe src=" + treeNode.page + " scrolling=\"auto\" style=\"width:100%;height:100%;border:0;\"></iframe>"
 				$('#tars').tabs('add',{ 
 					title:treeNode.name, 
 					content:content, 
 					closable:true, 
-					}); 
+					tools:[{
+						iconCls:'icon-reload',
+						handler : function(){ 
+							var tar =  $('#tars').tabs('getSelected'); 
+							tar.panel('refresh'); 
+						} 
+					}] 
+				}); 
 			}
 		}
 	};
@@ -100,7 +108,7 @@
 		window.setTimeout(function(){
 			$.messager.show({  	
 			  title:'消息提示',  	
-			  msg:'欢迎登录，${loginUser.username}！<a href="javascript:void" onclick="showAbout();">联系管理员</a>',  	
+			  msg:'欢迎登录，<shiro:principal property="username"/>！<a href="javascript:void" onclick="showAbout();">联系管理员</a>',  	
 			  timeout:5000,  	
 			  showType:'slide'
 			});
@@ -172,7 +180,7 @@
 			src="${pageContext.request.contextPath}/images/logo.png" border="0"/>
 		<!-- 当前用户信息 -->
 		<div style="position:absolute;right: 20px;top:10px;">
-			[<strong><shiro:principal property="username"></shiro:principal></strong>]，欢迎你！您使用[<strong>${pageContext.request.remoteAddr}</strong>]IP登录!
+			[<strong><shiro:principal property="username"/></strong>]，欢迎你！您使用[<strong>${pageContext.request.remoteAddr}</strong>]IP登录!
 		</div>
 		<!-- 更换皮肤和控制面板 -->
 		<div style="position: absolute; right: 5px; bottom: 10px; ">

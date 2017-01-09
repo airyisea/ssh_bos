@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri="/struts-tags"  prefix="s"%>   
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -26,73 +27,54 @@
 <script
 	src="${pageContext.request.contextPath }/js/easyui/locale/easyui-lang-zh_CN.js"
 	type="text/javascript"></script>
-<script type="text/javascript">
-	$(function(){
-		$("#grid").datagrid({
-			fit : true,
-			border : false,
-			rownumbers : true,
-			striped : true,
-			pageList: [5,10,15],
-			pageSize : 5,
-			pagination : true,
-			toolbar : [
-				{
-					id : 'add',
-					text : '添加权限',
-					iconCls : 'icon-add',
-					handler : function(){
-						location.href='${pageContext.request.contextPath}/page_admin_function_add.action';
-					}
-				}           
-			],
-			url : '${pageContext.request.contextPath}/auth/function_queryPage',
-			columns : [[
-			  {
-				  field : 'id',
-				  title : '编号',
-				  width : 200
-			  },
-			  {
-				  field : 'name',
-				  title : '名称',
-				  width : 200
-			  },  
-			  {
-				  field : 'description',
-				  title : '描述',
-				  width : 200
-			  },  
-			  {
-				  field : 'generatemenu',
-				  title : '是否生成菜单',
-				  width : 200,
-				  formatter : function(data,row, index){
-						if(data=="1"){
-							return "是";
-						}else{
-							return "否";
-						}
-					}
-			  },  
-			  {
-				  field : 'zindex',
-				  title : '优先级',
-				  width : 200
-			  },  
-			  {
-				  field : 'page',
-				  title : '路径',
-				  width : 200
-			  }
-			]]
-		});
-	});
-</script>	
 </head>
 <body class="easyui-layout">
-<div data-options="region:'center'">
-	<table id="grid"></table>
-</div>
+	<div data-options="region:'center'">
+		<table class="easyui-datagrid" fit="true" nowrap="false">
+			<thead>
+				<tr>
+					<th data-options="field:'id',width:120">任务编号</th>
+					<th data-options="field:'name',width:120">任务名称</th>
+					<th data-options="field:'data',width:520">业务数据</th>
+					<th data-options="field:'pick',width:120">拾取任务</th>
+				</tr>
+			</thead>
+			<script type="text/javascript">
+				function showData(taskId){
+					$.post("${pageContext.request.contextPath}/process/task_showData.action",{"id":taskId},function(data){
+						$("#div"+taskId).html(data);
+					});
+				}
+				
+				function toggleData(taskId){
+						$("#div"+taskId).toggle();
+				}
+			</script>
+			<tbody>
+			
+				<s:iterator value="list" var="task">
+					<tr>
+						<td><s:property value="id"/> </td>
+						<td><s:property value="name"/></td>
+						<td>
+							<a onclick="toggleData('${id}')" class="easyui-linkbutton">查看业务数据</a>
+							<div style="display: none" id="div${id }">
+								<script type="text/javascript">
+									showData('${id}');
+								</script>	
+							</div>
+						</td>
+						<td>
+							<s:a action="task_takeTask" namespace="/process" cssClass="easyui-linkbutton">拾取
+								<s:param name="id" value="id"></s:param>
+							</s:a>
+						</td>
+					</tr>
+					
+				</s:iterator>
+			</tbody>
+		</table>
+	</div>
 </body>
+
 </html>

@@ -15,6 +15,7 @@
 	http://www.springframework.org/schema/tx/spring-tx.xsd
 	http://www.springframework.org/schema/data/jpa
     http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+	<!-- shiro权限控制过滤器bean -->
 	<bean id="shiroSecurityFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<!-- shiro 的核心安全接口 -->
 		<property name="securityManager" ref="securityManager" />
@@ -36,22 +37,30 @@
 				/login.jsp = anon
 				/user/user_checkcode = anon
 				/user/user_login = anon
+				/user/user_login = anon
+				/demo** = anon
 				/page_base_** = roles["base"]
-				/page_qupai_** = roles["qupai"]
+				/page_qupai_** = roles["qupai","ywy"]
 				/** = authc
 			</value>
 		</property>
 	</bean>
+	<!-- 注册自定义realm -->
 	<bean id="bosRealm" class="com.airyisea.bos.realm.BosRealm">
+		<!-- 添加MD5加密 -->
 		<property name="credentialsMatcher">
 			<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
 				<property name="hashAlgorithmName" value="md5"></property>
 			</bean>
 		</property>
+		<!-- 添加二级缓存 -->
 		<property name="authorizationCacheName" value="shiro"></property>
 	</bean>
+	<!-- shiro安全管理器 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!-- 注入Realm连接安全数据 -->
 		<property name="realm" ref="bosRealm"></property>
+		<!-- 注入缓存控制器 -->
 		<property name="cacheManager" ref="shiroCacheManager"></property>
 	</bean>
 	<!--开启注解的权限控制  -->
@@ -63,11 +72,13 @@
 		<property name="proxyTargetClass" value="true"></property>
 	</bean>
 	<!-- 切面 -->
-	<bean
-		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
 		 <property name="securityManager" ref="securityManager"/>
 	</bean>
+	<!-- 注册shiro的缓存控制器 -->
 	<bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+         <!-- 注入ehcache的缓存控制器，在依赖的模块中已经进行了注册 -->
          <property name="cacheManager" ref="ehcacheManager"></property>
     </bean>
+    
 </beans>

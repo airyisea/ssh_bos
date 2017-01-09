@@ -50,11 +50,18 @@ public class WorkOrderManage  implements java.io.Serializable {
      private Integer feeitemnum;
      private Integer actlweit;
      private String vol;
-     private String managercheck;
      private Date updatetime;
+     private String managercheck = "0";//0:未审核，1：已审核;
+     private String start = "0";//0:未启动，1：已启动;
 
     public WorkOrderManage() {
     }
+    
+    public String toString() {
+		return "工作单信息 [编号=" + id + ", 货物名称=" + product
+				+ ", 货物重量=" + weight + ", 收货人="
+				+ receivername + ", 收货人电话=" + receiverphone + "]";
+	}
 
     public WorkOrderManage(String arrivecity, String product, Integer num, Integer weight, String floadreqr, String prodtimelimit, String prodtype, String sendername, String senderphone, String senderaddr, String receivername, String receiverphone, String receiveraddr, Integer feeitemnum, Integer actlweit, String vol, String managercheck, Date updatetime) {
        this.arrivecity = arrivecity;
@@ -248,6 +255,14 @@ public class WorkOrderManage  implements java.io.Serializable {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
+    @Column(name="START", length=1)
+	public String getStart() {
+		return start;
+	}
+
+	public void setStart(String start) {
+		this.start = start;
+	}
 
 
 
